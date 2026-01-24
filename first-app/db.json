@@ -1,0 +1,7 @@
+{
+  "policies": [
+    { "id": "POL-001", "name": "Comprehensive Health", "type": "health" },
+    { "id": "POL-002", "name": "Motor Insurance", "type": "motor" }
+  ],
+  "claims": []
+}

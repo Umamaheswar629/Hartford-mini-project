@@ -8,4 +8,5 @@ export interface Claim {
   status: 'pending' | 'approved' | 'rejected';
   description: string;
   documents: string[];
+  remarks?: string;
 }
