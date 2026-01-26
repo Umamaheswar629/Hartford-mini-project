@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ClaimService } from '../../services/claim-service';
 import { Claim } from '../../models/claim';
@@ -9,15 +9,13 @@ import { Policy } from '../../models/policy';
   standalone: true,
   imports: [FormsModule],
   templateUrl: './claims.html',
-  styleUrl: './claims.css'
+  styleUrl: './claims.css',
+  changeDetection: ChangeDetectionStrategy.OnPush // Forces manual change detection
 })
 export class ClaimsComponent implements OnInit {
   policies: Policy[] = [];
   claimHistory: Claim[] = [];
-  
-  // FIX: This solves the 'allClaims' error in claims.html
-  allClaims: Claim[] = []; 
-  
+  allClaims: Claim[] = [];
   userRole: string = 'customer'; // Change to 'admin' to see the review panel
 
   newClaim: Partial<Claim> = {
@@ -25,76 +23,101 @@ export class ClaimsComponent implements OnInit {
     date: new Date().toISOString().split('T')[0]
   };
 
-  constructor(private claimService: ClaimService) {}
+  constructor(
+    private claimService: ClaimService,
+    private cdr: ChangeDetectorRef // For manual change detection
+  ) {}
 
   ngOnInit() {
-    this.claimService.getPolicies().subscribe(data => this.policies = data);
+    this.claimService.getPolicies().subscribe({
+      next: (data) => {
+        this.policies = data;
+        this.cdr.detectChanges(); // Force UI update after async data load
+      }
+    });
     this.loadHistory();
     this.loadAllClaims();
   }
 
   loadHistory() {
-    this.claimService.getClaimsByCustomer('CUST-001').subscribe(data => this.claimHistory = data);
+    this.claimService
+      .getClaimsByCustomer('CUST-001')
+      .subscribe(data => {
+        this.claimHistory = data;
+        this.cdr.detectChanges();
+      });
   }
 
   loadAllClaims() {
-    this.claimService.getAllClaims().subscribe(data => this.allClaims = data);
+    this.claimService
+      .getAllClaims()
+      .subscribe(data => {
+        this.allClaims = data;
+        this.cdr.detectChanges();
+      });
   }
 
   onPolicySelect(policyId: string) {
     const selected = this.policies.find(p => p.id === policyId);
     if (selected) {
       this.newClaim.policyId = selected.id;
-      this.newClaim.type = selected.type; // Auto-fill requirement [cite: 76, 264]
+      this.newClaim.type = selected.type;
+      this.cdr.detectChanges(); // Ensure type field updates immediately
     }
   }
+
   saveClaim() {
-  if (!this.newClaim.policyId || !this.newClaim.amount) {
-    alert("Please fill all required fields");
-    return;
+    if (!this.newClaim.policyId || !this.newClaim.amount) {
+      alert('Please fill all required fields');
+      return;
+    }
+
+    this.claimService.submitClaim(this.newClaim as Claim).subscribe({
+      next: (response) => {
+        console.log('Server saved:', response);
+        alert('Claim filed successfully!');
+
+        // Optimistically update UI immediately
+        this.claimHistory.push(response);
+        this.allClaims.push(response);
+        this.cdr.detectChanges();
+
+        // Reset form
+        this.newClaim = {
+          status: 'pending',
+          date: new Date().toISOString().split('T')[0],
+          policyId: '',
+          type: '',
+          amount: 0,
+          description: ''
+        };
+        this.cdr.detectChanges();
+      },
+      error: (err) => console.error('Filing failed', err)
+    });
   }
 
-  this.claimService.submitClaim(this.newClaim as Claim).subscribe({
-    next: (response) => {
-      console.log('Server saved:', response);
-      alert('Claim filed successfully!');
-      
-      // Reset the object completely to clear the form
-      this.newClaim = {
-        status: 'pending',
-        date: new Date().toISOString().split('T')[0],
-        policyId: '',
-        type: '',
-        amount: 0,
-        description: ''
-      };
+  updateStatus(id: string, status: string) {
+    const remarks = prompt('Enter remarks for this decision:');
 
-      // Force a slight delay to give JSON Server time to finish writing to the file
-      setTimeout(() => {
-        this.loadHistory(); 
-        this.loadAllClaims();
-      }, 100); 
-    },
-    error: (err) => console.error('Filing failed', err)
-  });
-}
+    if (remarks === null) {
+      return;
+    }
 
-updateStatus(id: string, status: string) {
-  const remarks = prompt("Enter remarks for this decision:");
-  
-  if (remarks !== null) {
     this.claimService.updateClaimStatus(id, status, remarks).subscribe({
-      next: () => {
-        // Immediately refresh the Admin list
-        this.loadAllClaims();
-        
-        // Use a timeout for the History list to ensure the file is unlocked
-        setTimeout(() => {
-          this.loadHistory();
-        }, 200);
+      next: (updated) => {
+        // Update Admin list
+        this.allClaims = this.allClaims.map(c =>
+          c.id === id ? updated : c
+        );
+
+        // Update My Claim History list
+        this.claimHistory = this.claimHistory.map(c =>
+          c.id === id ? updated : c
+        );
+        this.cdr.detectChanges();
       },
       error: (err) => console.error('Update failed', err)
     });
   }
-}
 }

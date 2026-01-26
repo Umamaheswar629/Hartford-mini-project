@@ -10,7 +10,6 @@ export class ClaimService {
 
   constructor(private http: HttpClient) {}
 
-  // FIX: This solves the 'getPolicies' error
   getPolicies(): Observable<Policy[]> {
     return this.http.get<Policy[]>(`${this.apiUrl}/policies`);
   }

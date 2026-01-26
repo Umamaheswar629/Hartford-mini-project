@@ -2,22 +2,30 @@
   <h1 class="text-3xl font-bold text-blue-800 mb-8">Insurance Claims Processing</h1>
 
   <section class="bg-white p-6 rounded-lg shadow-md mb-10">
-    <h2 class="text-xl font-bold mb-4">File a Claim</h2>
-    <div class="grid gap-4">
-      <select (change)="onPolicySelect(policySelect.value)" #policySelect class="p-2 border rounded">
-        <option value="">-- Select Policy (Auto-fills Details) --</option>
-        @for (p of policies; track p.id) {
-          <option [value]="p.id">{{ p.name }} ({{ p.id }})</option>
-        }
-      </select>
-      
-      <input type="text" [value]="newClaim.type" readonly placeholder="Auto-filled Type" class="p-2 bg-gray-100 border rounded">
-      <input type="number" [(ngModel)]="newClaim.amount" placeholder="Claim Amount" class="p-2 border rounded">
-      <textarea [(ngModel)]="newClaim.description" placeholder="Description" class="p-2 border rounded"></textarea>
-      
-      <button (click)="saveClaim()" class="bg-blue-600 text-white py-2 rounded font-bold">Submit Claim</button>
-    </div>
-  </section>
+  <h2 class="text-xl font-bold mb-4">File a Claim</h2>
+  <div class="grid gap-4">
+    <select (change)="onPolicySelect(policySelect.value)" #policySelect class="p-2 border rounded">
+      <option value="">-- Select Policy (Auto-fills Details) --</option>
+      @for (p of policies; track p.id) {
+        <option [value]="p.id">{{ p.name }} ({{ p.id }})</option>
+      }
+    </select>
+    
+    <!-- FIXED: Use [ngModel] + (ngModelChange) instead of readonly [value] -->
+    <input type="text" 
+           [ngModel]="newClaim.type || ''" 
+           (ngModelChange)="newClaim.type = $event"
+           placeholder="Auto-filled Type" 
+           class="p-2 bg-gray-100 border rounded">
+    
+    <input type="number" [(ngModel)]="newClaim.amount" placeholder="Claim Amount" class="p-2 border rounded">
+    <textarea [(ngModel)]="newClaim.description" placeholder="Description" class="p-2 border rounded">
+    </textarea>
+    
+    <button (click)="saveClaim()" class="bg-blue-600 text-white py-2 rounded font-bold">Submit Claim</button>
+  </div>
+</section>
+
 
   <section class="mb-10">
     <h2 class="text-xl font-bold mb-4">My Claim History</h2>
