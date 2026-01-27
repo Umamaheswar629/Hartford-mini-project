@@ -1,0 +1,22 @@
+<p>admin-dashboard works!</p>
+<div class="min-h-screen flex items-center justify-center bg-gray-100 p-4">
+  <div class="w-full max-w-md bg-white p-6 rounded shadow text-center">
+    
+    <h1 class="text-2xl font-bold mb-4">Admin Logged In Successfully!</h1>
+    
+    @if (currentUser()) {
+      <div class="bg-blue-100 p-4 rounded mb-4">
+        <p class="font-bold">{{ currentUser()!.firstName }} {{ currentUser()!.lastName }}</p>
+        <p class="text-sm">{{ currentUser()!.email }}</p>
+        <p class="text-sm">Role: <span class="font-bold">{{ currentUser()!.role }}</span></p>
+      </div>
+    }
+    
+    <button 
+      (click)="logout()" 
+      class="bg-red-600 text-white px-4 py-2 rounded"
+    >
+      Logout
+    </button>
+  </div>
+</div>
