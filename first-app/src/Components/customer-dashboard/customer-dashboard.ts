@@ -6,7 +6,7 @@ import { Policy } from '../../models/policy';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth';
 import { PolicyService } from '../../services/policy';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, combineLatest, map } from 'rxjs';
 
 @Component({
   selector: 'app-customer-dashboard',
@@ -20,52 +20,87 @@ export class CustomerDashboardComponent implements OnInit {
   private auth = inject(AuthService);
   private policyService = inject(PolicyService);
 
-  // BehaviorSubjects for reactive data handling
   private allPolicies: Policy[] = [];
   private filteredSubject = new BehaviorSubject<Policy[]>([]);
   private registeredSubject = new BehaviorSubject<Policy[]>([]);
 
-  // Public Observables for the template
   filteredPolicies$ = this.filteredSubject.asObservable();
   registeredPolicies$ = this.registeredSubject.asObservable();
 
+  // --- NEW STATE PROPERTIES ---
   searchText = '';
+  sortBy = 'default';
+  selectedCategory = 'all';
+  compareList: Policy[] = [];
+  showCompareModal = false;
+
+  // Hero Stats calculated from registeredPolicies$
+  stats$ = this.registeredPolicies$.pipe(
+    map(policies => ({
+      totalCoverage: policies.reduce((acc, p) => acc + (p.coverage || 0), 0),
+      policyCount: policies.length,
+      nextDue: 'Feb 15, 2026' // Mock date for UI
+    }))
+  );
 
   ngOnInit() {
-    // 1. Sync Catalog from PolicyService
     this.policyService.policies$.subscribe(data => {
       this.allPolicies = data;
-      this.searchPolicy(); 
+      this.applyFilters(); 
     });
     this.policyService.loadAll();
-
-    // 2. Load Registered Policies
     this.loadRegisteredPolicies();
   }
 
   loadRegisteredPolicies() {
     const user = this.auth.getUser();
     if (!user) return;
-
     this.http.get<any[]>(`http://localhost:3000/customers?userId=${user.id}`)
       .subscribe(customers => {
         if (customers.length > 0) {
           const policyIds = customers[0].policyIds || [];
           this.policyService.getPoliciesByIds(policyIds).subscribe(data => {
-            // Push data into the registered stream
             this.registeredSubject.next(data);
           });
         }
       });
   }
 
-  searchPolicy() {
-    const text = this.searchText.toLowerCase();
-    const result = this.allPolicies.filter(p =>
-      p.name.toLowerCase().includes(text) || p.type.toLowerCase().includes(text)
-    );
-    // Push filtered results into the stream
+  // --- NEW FEATURE METHODS ---
+  applyFilters() {
+    let result = [...this.allPolicies];
+
+    // Search
+    if (this.searchText) {
+      const text = this.searchText.toLowerCase();
+      result = result.filter(p => p.name.toLowerCase().includes(text) || p.type.toLowerCase().includes(text));
+    }
+
+    // Category Filter
+    if (this.selectedCategory !== 'all') {
+      result = result.filter(p => p.type.toLowerCase() === this.selectedCategory.toLowerCase());
+    }
+
+    // Sorting
+    if (this.sortBy === 'low') result.sort((a, b) => a.premium - b.premium);
+    if (this.sortBy === 'high') result.sort((a, b) => b.premium - a.premium);
+
     this.filteredSubject.next(result);
+  }
+
+  toggleCompare(policy: Policy) {
+    const index = this.compareList.findIndex(p => p.id === policy.id);
+    if (index > -1) {
+      this.compareList.splice(index, 1);
+    } else if (this.compareList.length < 3) {
+      this.compareList.push(policy);
+    } else {
+      alert("You can compare up to 3 policies at a time.");
+    }
+  }
+
+  isInCompare(id: string): boolean {
+    return this.compareList.some(p => p.id === id);
   }
 
   viewDetails(policyId: string) {

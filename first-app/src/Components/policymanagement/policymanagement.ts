@@ -5,7 +5,6 @@ import { HttpClient } from "@angular/common/http";
 import { BehaviorSubject, map } from "rxjs";
 import { Policy } from "../../models/policy";
 import { PolicyForm } from "../policyform/policyform";
-import { AuthService } from "../../services/auth";
 
 @Component({
   selector: 'app-policy-management',
@@ -17,7 +16,6 @@ export class PolicyManagement implements OnInit {
   @Input() mode: 'admin' | 'customer' = 'admin';
 
   private http = inject(HttpClient);
-  private auth = inject(AuthService);
 
   private readonly api = 'http://localhost:3000';
 

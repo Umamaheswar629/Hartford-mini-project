@@ -2,8 +2,7 @@
 <!-- Top navigation bar (only if logged in) -->
 @if (isLoggedIn) {
   <div class="p-4 bg-gray-900 text-white flex gap-4">
-    <a routerLink="/admin" class="hover:underline">Admin Dashboard</a>
-    <a routerLink="/customer" class="hover:underline">Customer Dashboard</a>
+    
     <button class="ml-auto bg-red-600 px-3 py-1 rounded" (click)="logout()">
       Logout
     </button>

@@ -1,5 +1,22 @@
-<div class="p-6 max-w-7xl mx-auto">
+<div class="p-6 max-w-7xl mx-auto bg-gray-50 min-h-screen">
   
+  @if (stats$ | async; as stats) {
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+    <div class="bg-indigo-900 text-white rounded-2xl p-6 shadow-lg">
+      <p class="text-indigo-200 text-sm font-medium uppercase tracking-wider">Total Sum Insured</p>
+      <h3 class="text-3xl font-bold mt-1">₹{{ stats.totalCoverage | number }}</h3>
+    </div>
+    <div class="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm">
+      <p class="text-gray-500 text-sm font-medium uppercase tracking-wider">Active Policies</p>
+      <h3 class="text-3xl font-bold mt-1 text-gray-900">{{ stats.policyCount }}</h3>
+    </div>
+    <div class="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm">
+      <p class="text-gray-500 text-sm font-medium uppercase tracking-wider">Next Premium Due</p>
+      <h3 class="text-3xl font-bold mt-1 text-orange-600">{{ stats.nextDue }}</h3>
+    </div>
+  </div>
+  }
+
   <h2 class="text-2xl font-bold mb-6 text-indigo-900">My Registered Policies</h2>
   
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
@@ -25,49 +42,127 @@
     }
   </div>
 
-  <hr class="mb-12 border-gray-100">
+  <hr class="mb-12 border-gray-200">
 
-  <h2 class="text-2xl font-bold mb-4">Available Policy Catalog</h2>
+  <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-8">
+    <div>
+      <h2 class="text-2xl font-bold">Available Policy Catalog</h2>
+      <p class="text-gray-500 text-sm">Find the best protection for your future</p>
+    </div>
+    
+    <div class="flex flex-wrap gap-3 w-full lg:w-auto">
+      <input type="text" placeholder="Search policies..."
+             class="border border-gray-200 px-4 py-2 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 outline-none w-full md:w-64"
+             [(ngModel)]="searchText" (input)="applyFilters()" />
+      
+      <select [(ngModel)]="selectedCategory" (change)="applyFilters()" 
+              class="border border-gray-200 px-3 py-2 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 outline-none bg-white">
+        <option value="all">All Categories</option>
+        <option value="life">Life Insurance</option>
+        <option value="health">Health Insurance</option>
+      </select>
 
-  <div class="flex flex-col md:flex-row gap-4 mb-6">
-    <input type="text" placeholder="Search by name or type..."
-           class="border border-gray-200 px-4 py-2 w-full md:w-80 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 outline-none"
-           [(ngModel)]="searchText" (input)="searchPolicy()" />
+      <select [(ngModel)]="sortBy" (change)="applyFilters()" 
+              class="border border-gray-200 px-3 py-2 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 outline-none bg-white">
+        <option value="default">Sort By</option>
+        <option value="low">Price: Low to High</option>
+        <option value="high">Price: High to Low</option>
+      </select>
+
+      @if (compareList.length > 0) {
+        <button (click)="showCompareModal = true" 
+                class="bg-orange-500 text-white px-4 py-2 rounded-lg font-bold shadow-md hover:bg-orange-600 animate-pulse">
+          Compare ({{ compareList.length }})
+        </button>
+      }
+    </div>
   </div>
 
-  <div class="overflow-hidden bg-white rounded-xl shadow-sm border border-gray-100">
-    <table class="min-w-full divide-y divide-gray-200">
-      <thead class="bg-gray-50">
-        <tr>
-          <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase">Name</th>
-          <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase">Type</th>
-          <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase">Premium</th>
-          <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase">Coverage</th>
-          <th class="px-6 py-4 text-right text-xs font-bold text-gray-500 uppercase">Action</th>
-        </tr>
-      </thead>
-      <tbody class="divide-y divide-gray-100">
-        @for (policy of filteredPolicies$ | async; track policy.id) {
-          <tr class="hover:bg-gray-50/50">
-            <td class="px-6 py-4 text-sm font-medium text-gray-900">{{ policy.name }}</td>
-            <td class="px-6 py-4 text-sm text-gray-600 capitalize">{{ policy.type }}</td>
-            <td class="px-6 py-4 text-sm text-gray-900 font-semibold">₹{{ policy.premium }}</td>
-            <td class="px-6 py-4 text-sm text-gray-600">₹{{ policy.coverage }}</td>
-            <td class="px-6 py-4 text-right text-sm">
-              <button (click)="viewDetails(policy.id)"
-                      class="text-indigo-600 font-bold hover:underline">
-                View
-              </button>
-            </td>
-          </tr>
-        } @empty {
-          <tr>
-            <td colspan="5" class="px-6 py-10 text-center text-gray-400 italic">
-              No matching policies found.
-            </td>
-          </tr>
-        }
-      </tbody>
-    </table>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    @for (policy of filteredPolicies$ | async; track policy.id) {
+      <div class="bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow p-5 flex flex-col justify-between relative">
+        <label class="absolute top-4 right-4 flex items-center gap-1 text-xs text-gray-400 cursor-pointer">
+          <input type="checkbox" [checked]="isInCompare(policy.id)" (change)="toggleCompare(policy)"> Compare
+        </label>
+
+        <div>
+          <div class="flex justify-between items-start mb-4">
+            <h3 class="text-lg font-bold text-gray-900 leading-tight pr-10">
+              {{ policy.name }}
+            </h3>
+            <span class="px-2 py-1 text-xs font-semibold bg-indigo-50 text-indigo-700 rounded-full capitalize">
+              {{ policy.type }}
+            </span>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4 mb-6">
+            <div>
+              <p class="text-xs text-gray-500 uppercase font-bold tracking-wider">Premium</p>
+              <p class="text-sm text-gray-900 font-bold">₹{{ policy.premium }}</p>
+            </div>
+            <div>
+              <p class="text-xs text-gray-500 uppercase font-bold tracking-wider">Coverage</p>
+              <p class="text-sm text-gray-900 font-semibold text-gray-600">₹{{ policy.coverage }}</p>
+            </div>
+          </div>
+        </div>
+
+        <button (click)="viewDetails(policy.id)"
+                class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-bold transition-colors text-sm">
+          View Details
+        </button>
+      </div>
+    } @empty {
+      <div class="col-span-full py-20 text-center bg-white rounded-xl border border-dashed border-gray-200">
+        <p class="text-gray-400 italic">No matching policies found.</p>
+      </div>
+    }
   </div>
+
+  @if (showCompareModal) {
+    <div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+      <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl overflow-hidden">
+        <div class="p-6 border-b flex justify-between items-center bg-gray-50">
+          <h3 class="text-xl font-bold">Policy Comparison</h3>
+          <button (click)="showCompareModal = false" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
+        </div>
+        <div class="p-6 overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr>
+                <th class="p-3 border-b text-gray-500 font-medium">Features</th>
+                @for (item of compareList; track item.id) {
+                  <th class="p-3 border-b font-bold text-indigo-700">{{ item.name }}</th>
+                }
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="p-3 border-b text-sm font-bold">Premium</td>
+                @for (item of compareList; track item.id) {
+                  <td class="p-3 border-b text-sm font-bold text-gray-900">₹{{ item.premium }}</td>
+                }
+              </tr>
+              <tr>
+                <td class="p-3 border-b text-sm font-bold">Coverage</td>
+                @for (item of compareList; track item.id) {
+                  <td class="p-3 border-b text-sm text-gray-600">₹{{ item.coverage }}</td>
+                }
+              </tr>
+              <tr>
+                <td class="p-3 border-b text-sm font-bold">Duration</td>
+                @for (item of compareList; track item.id) {
+                  <td class="p-3 border-b text-sm text-gray-600">{{ item.duration }} Years</td>
+                }
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="p-4 bg-gray-50 text-right">
+          <button (click)="compareList = []; showCompareModal = false" class="text-sm text-red-600 font-bold mr-4">Clear All</button>
+          <button (click)="showCompareModal = false" class="bg-indigo-600 text-white px-6 py-2 rounded-lg font-bold">Close</button>
+        </div>
+      </div>
+    </div>
+  }
 </div>
