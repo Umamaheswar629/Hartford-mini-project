@@ -3,6 +3,8 @@ import { FormsModule } from '@angular/forms';
 import { ClaimService } from '../../services/claim-service';
 import { Claim } from '../../models/claim';
 import { Policy } from '../../models/policy';
+import { AuthService } from '../../services/auth';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-claims',
@@ -24,6 +26,8 @@ export class ClaimsComponent implements OnInit {
   };
 
   constructor(
+    private authService:AuthService,
+    private router: Router,
     private claimService: ClaimService,
     private cdr: ChangeDetectorRef // For manual change detection
   ) {}
@@ -119,5 +123,10 @@ export class ClaimsComponent implements OnInit {
       },
       error: (err) => console.error('Update failed', err)
     });
+  }
+
+  logout(): void {
+    this.authService.logout();
+    this.router.navigate(['/login']);
   }
 }

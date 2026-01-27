@@ -145,13 +145,14 @@
       "type": "health",
       "amount": 50000,
       "date": "2024-01-20",
-      "status": "pending",
+      "status": "approved",
       "description": "Hospitalization claim for surgery",
       "documents": [
         "bill1.jpg",
         "report.pdf"
       ],
-      "createdAt": "2024-01-20T09:00:00Z"
+      "createdAt": "2024-01-20T09:00:00Z",
+      "remarks": "done!!!"
     },
     {
       "id": "CLAIM-002",
@@ -167,6 +168,25 @@
         "estimate.jpg"
       ],
       "createdAt": "2024-01-21T14:30:00Z"
+    },
+    {
+      "id": "fcbb",
+      "status": "rejected",
+      "date": "2026-01-27",
+      "policyId": "POL-003",
+      "type": "vehicle",
+      "amount": 346356,
+      "description": "fbsht",
+      "remarks": "shitttt"
+    },
+    {
+      "id": "b960",
+      "status": "pending",
+      "date": "2026-01-27",
+      "policyId": "POL-002",
+      "type": "life",
+      "amount": 365356,
+      "description": "fgetht"
     }
   ],
   "agents": [
