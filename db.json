@@ -1,0 +1,137 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "username": "admin",
+      "email": "admin@insurance.com",
+      "password": "admin123",
+      "role": "admin",
+      "firstName": "System",
+      "lastName": "Admin",
+      "phone": "9999999999",
+      "createdAt": "2024-01-01"
+    },
+    {
+      "id": "2",
+      "username": "agent1",
+      "email": "agent1@insurance.com",
+      "password": "agent123",
+      "role": "agent",
+      "firstName": "Ravi",
+      "lastName": "Kumar",
+      "phone": "8888888888",
+      "createdAt": "2024-01-05"
+    },
+    {
+      "id": "3",
+      "username": "customer1",
+      "email": "cust1@insurance.com",
+      "password": "cust123",
+      "role": "customer",
+      "firstName": "Sai",
+      "lastName": "Sri",
+      "phone": "7777777777",
+      "createdAt": "2024-01-10"
+    }
+  ],
+  "agents": [
+    {
+      "id": "A101",
+      "userId": 2,
+      "licenseNumber": "LIC12345",
+      "commissionRate": 500,
+      "assignedCustomers": [
+        "C201"
+      ],
+      "totalPoliciesSold": 3
+    }
+  ],
+  "customers": [
+    {
+      "id": "C201",
+      "userId": "3",
+      "policyIds": [
+        "P301",
+        "P302",
+        "P558",
+        "P21"
+      ],
+      "nominee": "Suresh",
+      "address": "Hyderabad",
+      "dateOfBirth": "1999-06-15",
+      "aadharNumber": "123456789012",
+      "panNumber": "ABCDE1234F"
+    }
+  ],
+  "policies": [
+    {
+      "id": "P301",
+      "name": "Health Secure Plus for women",
+      "type": "life",
+      "premium": 12000,
+      "coverage": 500000,
+      "duration": 1,
+      "description": "Comprehensive health insurance",
+      "features": [
+        "Cashless Hospitalization",
+        "No Claim Bonus"
+      ],
+      "createdAt": "2024-01-12"
+    },
+    {
+      "id": "P558",
+      "name": "Srihitha",
+      "type": "health",
+      "premium": 15000,
+      "coverage": 3000,
+      "duration": 1,
+      "description": "VERY HELPFUL",
+      "features": [],
+      "createdAt": ""
+    },
+    {
+      "id": "P21",
+      "name": "xsd",
+      "type": "health",
+      "premium": 1000,
+      "coverage": 20,
+      "duration": 1,
+      "description": "cdsf",
+      "features": [],
+      "createdAt": ""
+    }
+  ],
+  "claims": [
+    {
+      "id": "CL401",
+      "policyId": "P301",
+      "customerId": "C201",
+      "type": "health",
+      "amount": 45000,
+      "date": "2024-02-01",
+      "status": "pending",
+      "description": "Hospital treatment expenses",
+      "documents": [
+        "bill.pdf",
+        "report.pdf"
+      ],
+      "assignedAgentId": "A101",
+      "remarks": "good"
+    },
+    {
+      "id": "CL402",
+      "policyId": null,
+      "customerId": "C201",
+      "type": "life",
+      "amount": 200000,
+      "date": "2024-02-05",
+      "status": "approved",
+      "description": "Life insurance claim",
+      "documents": [
+        "death_certificate.pdf"
+      ],
+      "assignedAgentId": "A101",
+      "remarks": ""
+    }
+  ]
+}
