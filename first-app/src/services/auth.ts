@@ -19,7 +19,8 @@ export class AuthService {
   private apiUrl = 'http://localhost:3000/users';
   
   // Signal for current user
-  private currentUserSignal = signal<User | null>(this.getUserFromStorage());
+  // private currentUserSignal = signal<User | null>(this.getUserFromStorage());
+  private currentUserSignal = signal<User | null>(null);
   
   // Computed signals
   currentUser = computed(() => this.currentUserSignal());
@@ -62,8 +63,8 @@ export class AuthService {
       const token = this.generateJWT(userWithoutPassword);
       
       // Store in localStorage
-      localStorage.setItem('currentUser', JSON.stringify(userWithoutPassword));
-      localStorage.setItem('authToken', token);
+      // localStorage.setItem('currentUser', JSON.stringify(userWithoutPassword));
+      // localStorage.setItem('authToken', token);
       
       // Update signal
       this.currentUserSignal.set(userWithoutPassword);
@@ -112,8 +113,7 @@ export class AuthService {
    * Logout
    */
   logout(): void {
-    localStorage.removeItem('currentUser');
-    localStorage.removeItem('authToken');
+    // REMOVED: localStorage.removeItem calls
     this.currentUserSignal.set(null);
   }
 

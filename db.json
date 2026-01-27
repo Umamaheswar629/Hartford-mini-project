@@ -54,6 +54,17 @@
       "lastName": "doir",
       "phone": "6300983010",
       "createdAt": "2026-01-27T04:04:59.929Z"
+    },
+    {
+      "id": "99de",
+      "username": "abcd...",
+      "email": "ranjan@guvi.com",
+      "password": "hellohello",
+      "role": "customer",
+      "firstName": "Ranjan",
+      "lastName": "Bhatnagar",
+      "phone": "9876543210",
+      "createdAt": "2026-01-27T11:44:55.291Z"
     }
   ],
   "policies": [
@@ -104,6 +115,17 @@
         "Roadside Assistance"
       ],
       "createdAt": "2024-01-15T10:00:00Z"
+    },
+    {
+      "id": "P168",
+      "name": "sfnf",
+      "type": "life",
+      "premium": 12444,
+      "coverage": 222225,
+      "duration": 1,
+      "description": "hello",
+      "features": [],
+      "createdAt": ""
     }
   ],
   "customers": [
@@ -145,13 +167,14 @@
       "type": "health",
       "amount": 50000,
       "date": "2024-01-20",
-      "status": "pending",
+      "status": "approved",
       "description": "Hospitalization claim for surgery",
       "documents": [
         "bill1.jpg",
         "report.pdf"
       ],
-      "createdAt": "2024-01-20T09:00:00Z"
+      "createdAt": "2024-01-20T09:00:00Z",
+      "remarks": "done!!!"
     },
     {
       "id": "CLAIM-002",
@@ -167,6 +190,75 @@
         "estimate.jpg"
       ],
       "createdAt": "2024-01-21T14:30:00Z"
+    },
+    {
+      "id": "fcbb",
+      "status": "rejected",
+      "date": "2026-01-27",
+      "policyId": "POL-003",
+      "type": "vehicle",
+      "amount": 346356,
+      "description": "fbsht",
+      "remarks": "shitttt"
+    },
+    {
+      "id": "b960",
+      "status": "approved",
+      "date": "2026-01-27",
+      "policyId": "POL-002",
+      "type": "life",
+      "amount": 365356,
+      "description": "fgetht",
+      "remarks": "rger"
+    },
+    {
+      "id": "14ca",
+      "status": "rejected",
+      "date": "2026-01-27",
+      "policyId": "POL-002",
+      "type": "life",
+      "amount": 5353,
+      "description": "dbete",
+      "remarks": ""
+    },
+    {
+      "id": "498f",
+      "status": "approved",
+      "date": "2026-01-27",
+      "policyId": "POL-002",
+      "type": "life",
+      "amount": 4352,
+      "description": "sfrgwe",
+      "remarks": "done"
+    },
+    {
+      "id": "f742",
+      "status": "approved",
+      "date": "2026-01-27",
+      "policyId": "P168",
+      "type": "life",
+      "amount": 3565,
+      "description": "dgheth",
+      "remarks": ""
+    },
+    {
+      "id": "172e",
+      "status": "approved",
+      "date": "2026-01-27",
+      "policyId": "POL-002",
+      "type": "life",
+      "amount": 3255,
+      "description": "hello",
+      "remarks": ""
+    },
+    {
+      "id": "d2d0",
+      "status": "pending",
+      "date": "2026-01-27",
+      "policyId": "POL-002",
+      "type": "life",
+      "amount": 54754,
+      "description": "dghetjd"
     }
   ],
   "agents": [
