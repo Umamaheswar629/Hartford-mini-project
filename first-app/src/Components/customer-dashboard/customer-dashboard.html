@@ -1,168 +1,72 @@
+<app-customer-navbar></app-customer-navbar>
+
 <div class="p-6 max-w-7xl mx-auto bg-gray-50 min-h-screen">
   
+  <div class="mb-10 mt-6">
+    <h1 class="text-4xl font-black text-gray-900 tracking-tight">Dashboard Overview</h1>
+    <p class="text-gray-500 text-lg mt-2">Manage your protections and explore new insurance opportunities.</p>
+  </div>
+
   @if (stats$ | async; as stats) {
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-    <div class="bg-indigo-900 text-white rounded-2xl p-6 shadow-lg">
-      <p class="text-indigo-200 text-sm font-medium uppercase tracking-wider">Total Sum Insured</p>
-      <h3 class="text-3xl font-bold mt-1">₹{{ stats.totalCoverage | number }}</h3>
-    </div>
-    <div class="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm">
-      <p class="text-gray-500 text-sm font-medium uppercase tracking-wider">Active Policies</p>
-      <h3 class="text-3xl font-bold mt-1 text-gray-900">{{ stats.policyCount }}</h3>
-    </div>
-    <div class="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm">
-      <p class="text-gray-500 text-sm font-medium uppercase tracking-wider">Next Premium Due</p>
-      <h3 class="text-3xl font-bold mt-1 text-orange-600">{{ stats.nextDue }}</h3>
-    </div>
-  </div>
-  }
-
-  <h2 class="text-2xl font-bold mb-6 text-indigo-900">My Registered Policies</h2>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
   
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-    @for (rp of registeredPolicies$ | async; track rp.id) {
-      <div class="bg-white border-l-4 border-green-500 rounded-xl shadow-sm p-5 hover:shadow-md transition">
-        <div class="flex justify-between items-start mb-3">
-          <h3 class="font-bold text-lg text-gray-800">{{ rp.name }}</h3>
-          <span class="px-2 py-1 rounded text-xs font-bold bg-green-100 text-green-700 uppercase">Active</span>
-        </div>
-        <div class="text-sm text-gray-600 space-y-1 mb-4">
-          <p><strong>Coverage:</strong> ₹{{ rp.coverage }}</p>
-          <p><strong>Premium Paid:</strong> ₹{{ rp.premium }}</p>
-        </div>
-        <button (click)="viewDetails(rp.id)" 
-                class="w-full py-2 text-sm font-semibold text-indigo-600 border border-indigo-600 rounded-lg hover:bg-indigo-50">
-          View Details
-        </button>
-      </div>
-    } @empty {
-      <div class="col-span-full text-center py-10 bg-gray-50 rounded-xl text-gray-400">
-        You haven't registered for any policies yet.
-      </div>
-    }
+  <div class="bg-indigo-900 text-white rounded-[2.5rem] p-12 shadow-2xl shadow-indigo-200 transform hover:scale-[1.03] transition-all border border-indigo-800">
+    <p class="text-indigo-300 text-sm font-bold uppercase tracking-[0.2em]">Total Protection</p>
+    <h3 class="text-5xl font-black mt-4 tracking-tighter">₹{{ stats.totalCoverage | number }}</h3>
+    <p class="text-indigo-400 text-xs mt-4 font-medium italic">Across all active assets</p>
+  </div>
+  
+  <div class="bg-white border border-gray-100 rounded-[2.5rem] p-12 shadow-sm hover:shadow-md transition-shadow">
+    <p class="text-gray-400 text-sm font-bold uppercase tracking-[0.2em]">Active Plans</p>
+    <h3 class="text-5xl font-black mt-4 text-gray-900 tracking-tighter">{{ stats.policyCount }}</h3>
+    <p class="text-gray-400 text-xs mt-4 font-medium">Currently in force</p>
   </div>
 
-  <hr class="mb-12 border-gray-200">
-
-  <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-8">
-    <div>
-      <h2 class="text-2xl font-bold">Available Policy Catalog</h2>
-      <p class="text-gray-500 text-sm">Find the best protection for your future</p>
-    </div>
-    
-    <div class="flex flex-wrap gap-3 w-full lg:w-auto">
-      <input type="text" placeholder="Search policies..."
-             class="border border-gray-200 px-4 py-2 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 outline-none w-full md:w-64"
-             [(ngModel)]="searchText" (input)="applyFilters()" />
-      
-      <select [(ngModel)]="selectedCategory" (change)="applyFilters()" 
-              class="border border-gray-200 px-3 py-2 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 outline-none bg-white">
-        <option value="all">All Categories</option>
-        <option value="life">Life Insurance</option>
-        <option value="health">Health Insurance</option>
-      </select>
-
-      <select [(ngModel)]="sortBy" (change)="applyFilters()" 
-              class="border border-gray-200 px-3 py-2 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-500 outline-none bg-white">
-        <option value="default">Sort By</option>
-        <option value="low">Price: Low to High</option>
-        <option value="high">Price: High to Low</option>
-      </select>
-
-      @if (compareList.length > 0) {
-        <button (click)="showCompareModal = true" 
-                class="bg-orange-500 text-white px-4 py-2 rounded-lg font-bold shadow-md hover:bg-orange-600 animate-pulse">
-          Compare ({{ compareList.length }})
-        </button>
-      }
-    </div>
+  <div class="bg-white border border-gray-100 rounded-[2.5rem] p-12 shadow-sm hover:shadow-md transition-shadow">
+    <p class="text-gray-400 text-sm font-bold uppercase tracking-[0.2em]">Annual Premium</p>
+    <h3 class="text-5xl font-black mt-4 text-indigo-600 tracking-tighter">₹{{ stats.totalPremium | number }}</h3>
+    <p class="text-gray-400 text-xs mt-4 font-medium">Consolidated yearly cost</p>
   </div>
 
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-    @for (policy of filteredPolicies$ | async; track policy.id) {
-      <div class="bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow p-5 flex flex-col justify-between relative">
-        <label class="absolute top-4 right-4 flex items-center gap-1 text-xs text-gray-400 cursor-pointer">
-          <input type="checkbox" [checked]="isInCompare(policy.id)" (change)="toggleCompare(policy)"> Compare
-        </label>
-
-        <div>
-          <div class="flex justify-between items-start mb-4">
-            <h3 class="text-lg font-bold text-gray-900 leading-tight pr-10">
-              {{ policy.name }}
-            </h3>
-            <span class="px-2 py-1 text-xs font-semibold bg-indigo-50 text-indigo-700 rounded-full capitalize">
-              {{ policy.type }}
-            </span>
-          </div>
-
-          <div class="grid grid-cols-2 gap-4 mb-6">
-            <div>
-              <p class="text-xs text-gray-500 uppercase font-bold tracking-wider">Premium</p>
-              <p class="text-sm text-gray-900 font-bold">₹{{ policy.premium }}</p>
-            </div>
-            <div>
-              <p class="text-xs text-gray-500 uppercase font-bold tracking-wider">Coverage</p>
-              <p class="text-sm text-gray-900 font-semibold text-gray-600">₹{{ policy.coverage }}</p>
-            </div>
-          </div>
-        </div>
-
-        <button (click)="viewDetails(policy.id)"
-                class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-bold transition-colors text-sm">
-          View Details
-        </button>
-      </div>
-    } @empty {
-      <div class="col-span-full py-20 text-center bg-white rounded-xl border border-dashed border-gray-200">
-        <p class="text-gray-400 italic">No matching policies found.</p>
-      </div>
-    }
-  </div>
-
-  @if (showCompareModal) {
-    <div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl overflow-hidden">
-        <div class="p-6 border-b flex justify-between items-center bg-gray-50">
-          <h3 class="text-xl font-bold">Policy Comparison</h3>
-          <button (click)="showCompareModal = false" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
-        </div>
-        <div class="p-6 overflow-x-auto">
-          <table class="w-full text-left border-collapse">
-            <thead>
-              <tr>
-                <th class="p-3 border-b text-gray-500 font-medium">Features</th>
-                @for (item of compareList; track item.id) {
-                  <th class="p-3 border-b font-bold text-indigo-700">{{ item.name }}</th>
-                }
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td class="p-3 border-b text-sm font-bold">Premium</td>
-                @for (item of compareList; track item.id) {
-                  <td class="p-3 border-b text-sm font-bold text-gray-900">₹{{ item.premium }}</td>
-                }
-              </tr>
-              <tr>
-                <td class="p-3 border-b text-sm font-bold">Coverage</td>
-                @for (item of compareList; track item.id) {
-                  <td class="p-3 border-b text-sm text-gray-600">₹{{ item.coverage }}</td>
-                }
-              </tr>
-              <tr>
-                <td class="p-3 border-b text-sm font-bold">Duration</td>
-                @for (item of compareList; track item.id) {
-                  <td class="p-3 border-b text-sm text-gray-600">{{ item.duration }} Years</td>
-                }
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="p-4 bg-gray-50 text-right">
-          <button (click)="compareList = []; showCompareModal = false" class="text-sm text-red-600 font-bold mr-4">Clear All</button>
-          <button (click)="showCompareModal = false" class="bg-indigo-600 text-white px-6 py-2 rounded-lg font-bold">Close</button>
-        </div>
-      </div>
-    </div>
+</div>
   }
+
+  
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+    
+    <div routerLink="/customer/catalog" class="group cursor-pointer bg-white border border-gray-100 p-10 rounded-[2.5rem] hover:border-indigo-500 hover:shadow-2xl hover:shadow-indigo-100 transition-all">
+      <div class="w-16 h-16 bg-indigo-50 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-indigo-600 group-hover:text-white transition-all duration-500">
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+      </div>
+      <h4 class="text-2xl font-black text-gray-900 mb-2">Explore Plans</h4>
+      <p class="text-gray-500 leading-relaxed">Discover new insurance products tailored to your lifestyle and budget.</p>
+      <div class="mt-6 text-indigo-600 font-bold flex items-center gap-2 group-hover:gap-4 transition-all">
+        Browse Catalog <span>&rarr;</span>
+      </div>
+    </div>
+
+    <div routerLink="/customer/policies" class="group cursor-pointer bg-white border border-gray-100 p-10 rounded-[2.5rem] hover:border-green-500 hover:shadow-2xl hover:shadow-green-100 transition-all">
+      <div class="w-16 h-16 bg-green-50 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-green-600 group-hover:text-white transition-all duration-500">
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+      </div>
+      <h4 class="text-2xl font-black text-gray-900 mb-2">My Policies</h4>
+      <p class="text-gray-500 leading-relaxed">View all your registered policies, check coverage details, and download certificates.</p>
+      <div class="mt-6 text-green-600 font-bold flex items-center gap-2 group-hover:gap-4 transition-all">
+        View Portfolio <span>&rarr;</span>
+      </div>
+    </div>
+
+    <div routerLink="/customer/claims" class="group cursor-pointer bg-white border border-gray-100 p-10 rounded-[2.5rem] hover:border-orange-500 hover:shadow-2xl hover:shadow-orange-100 transition-all">
+      <div class="w-16 h-16 bg-orange-50 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-orange-600 group-hover:text-white transition-all duration-500">
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+      </div>
+      <h4 class="text-2xl font-black text-gray-900 mb-2">Claims Center</h4>
+      <p class="text-gray-500 leading-relaxed">Submit a new claim or track the status of your ongoing requests in real-time.</p>
+      <div class="mt-6 text-orange-600 font-bold flex items-center gap-2 group-hover:gap-4 transition-all">
+        Manage Claims <span>&rarr;</span>
+      </div>
+    </div>
+
+  </div>
 </div>

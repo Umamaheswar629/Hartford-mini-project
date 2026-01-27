@@ -1,12 +1,3 @@
 
-<!-- Top navigation bar (only if logged in) -->
-@if (isLoggedIn) {
-  <div class="p-4 bg-gray-900 text-white flex gap-4">
-    
-    <button class="ml-auto bg-red-600 px-3 py-1 rounded" (click)="logout()">
-      Logout
-    </button>
-  </div>
-}
 <!-- Main content -->
 <router-outlet></router-outlet>
