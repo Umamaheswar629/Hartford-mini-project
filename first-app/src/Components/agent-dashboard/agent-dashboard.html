@@ -1,22 +1,194 @@
-<p>agent-dashboard works!</p>
-<div class="min-h-screen flex items-center justify-center bg-gray-100 p-4">
-  <div class="w-full max-w-md bg-white p-6 rounded shadow text-center">
-    
-    <h1 class="text-2xl font-bold mb-4">Agent Logged In Successfully!</h1>
-    
-    @if (currentUser()) {
-      <div class="bg-purple-100 p-4 rounded mb-4">
-        <p class="font-bold">{{ currentUser()!.firstName }} {{ currentUser()!.lastName }}</p>
-        <p class="text-sm">{{ currentUser()!.email }}</p>
-        <p class="text-sm">Role: <span class="font-bold">{{ currentUser()!.role }}</span></p>
+<header class="bg-white border-b border-gray-200 px-6 py-4 flex justify-between items-center relative">
+  <h1 class="text-xl font-bold text-blue-700">Agent Portal</h1>
+
+  <div class="relative">
+    <button 
+      (click)="toggleDropdown()" 
+      class="flex items-center gap-2 hover:bg-gray-100 p-2 rounded-full transition"
+    >
+      <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold">
+        {{ agentProfile?.firstName?.[0] }}{{ agentProfile?.lastName?.[0] }}
+      </div>
+      <span class="text-sm font-medium text-gray-700">My Profile</span>
+    </button>
+
+    @if (showProfileDropdown && agentProfile) {
+      <div class="absolute right-0 mt-2 w-72 bg-white border border-gray-200 shadow-xl rounded-lg z-50 p-4">
+        <div class="text-center border-b pb-3 mb-3">
+          <p class="font-bold text-gray-900">{{ agentProfile.firstName }} {{ agentProfile.lastName }}</p>
+          <p class="text-xs text-gray-500">{{ agentProfile.email }}</p>
+          <span class="mt-2 inline-block bg-blue-100 text-blue-700 text-[10px] px-2 py-0.5 rounded-full uppercase font-bold">
+            Agent ID: {{ agentProfile.id }}
+          </span>
+        </div>
+
+        <div class="space-y-2 text-sm">
+          <div class="flex justify-between">
+            <span class="text-gray-500">License:</span>
+            <span class="font-medium">{{ agentProfile.licenseNumber }}</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-500">Comm. Rate:</span>
+            <span class="font-medium">{{ agentProfile.commissionRate }}%</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-500">Policies Sold:</span>
+            <span class="font-medium text-green-600 font-bold">{{ agentProfile.totalPoliciesSold }}</span>
+          </div>
+        </div>
+
+        <button 
+          (click)="logout()" 
+          class="w-full mt-4 bg-red-50 text-red-600 py-2 rounded text-sm font-semibold hover:bg-red-100 transition"
+        >
+          Logout
+        </button>
       </div>
     }
-    
-    <button 
+  </div>
+</header>
+<div class="m-4 grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+  
+  <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+    <p class="text-sm text-gray-500 font-medium italic">Pending Claims</p>
+    <h3 class="text-3xl font-bold text-amber-600">
+      {{ (pendingCount$ | async) || 0 }}
+    </h3>
+    <div class="text-[10px] text-amber-400 mt-1 uppercase tracking-wider">Awaiting Review</div>
+  </div>
+
+  <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+    <p class="text-sm text-gray-500 font-medium italic">Completed Claims</p>
+    <h3 class="text-3xl font-bold text-green-600">
+      {{ (completedCount$ | async) || 0 }}
+    </h3>
+    <div class="text-[10px] text-green-400 mt-1 uppercase tracking-wider">Successfully Processed</div>
+  </div>
+
+  <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm border-l-4 border-l-blue-600">
+    <p class="text-sm text-gray-500 font-medium italic">Your Earnings</p>
+    <h3 class="text-3xl font-bold text-blue-600">
+      {{ (totalCommission$ | async) | currency:'INR':'symbol':'1.0-0' }}
+    </h3>
+    <div class="text-[10px] text-blue-400 mt-1 uppercase tracking-wider">
+      Based on {{ agentDetails?.commissionRate | currency:'INR' }} per claim
+    </div>
+  </div>
+
+</div>
+<div class="p-6">
+  <h2 class="text-2xl font-bold mb-6 text-gray-800">Assigned Claims</h2>
+
+  <div class="overflow-hidden rounded-lg border border-gray-200 shadow-sm">
+    <table class="w-full border-collapse bg-white text-left text-sm text-gray-500">
+      <thead class="bg-gray-50">
+        <tr>
+          <th scope="col" class="px-6 py-4 font-medium text-gray-900 border-b">Customer Name</th>
+          <th scope="col" class="px-6 py-4 font-medium text-gray-900 border-b">Policy</th>
+          <th scope="col" class="px-6 py-4 font-medium text-gray-900 border-b">Status</th>
+          <th scope="col" class="px-6 py-4 font-medium text-gray-900 border-b">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-100 border-t border-gray-100">
+        @for (row of (customersAssigned$ | async); track row.claimId) {
+          <tr class="hover:bg-gray-50 transition-colors">
+            <td class="px-6 py-4">
+              <div class="font-medium text-gray-900">{{ row.customerName }}</div>
+              <div class="text-xs text-gray-400">{{ row.address }}</div>
+            </td>
+            <td class="px-6 py-4">
+              <span class="inline-flex items-center gap-1 rounded-full bg-blue-50 px-2 py-1 text-xs font-semibold text-blue-600">
+                {{ row.policyName }}
+              </span>
+            </td>
+            <td class="px-6 py-4">
+              <span 
+                [ngClass]="{
+                  'bg-amber-100 text-amber-700': row.status === 'pending',
+                  'bg-green-100 text-green-700': row.status === 'approved',
+                  'bg-red-100 text-red-700': row.status === 'rejected'
+                }"
+                class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset ring-current"
+              >
+                {{ row.status | titlecase }}
+              </span>
+            </td>
+            <td class="px-6 py-4">
+              <button 
+                class="font-medium text-blue-600 hover:text-blue-800 hover:underline" 
+                (click)="viewDetails(row.claimId)"
+              >
+                View Details
+              </button>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="4" class="px-6 py-10 text-center text-gray-400 italic">
+              No claims currently assigned to your account.
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
+<h3 class="p-6 font-bold text-2xl text-gray-800">New Customer Leads</h3>
+<div class="ml-6 mr-6 bg-white shadow-sm border border-gray-200 rounded-xl overflow-hidden">
+  <div class="overflow-x-auto">
+    <table class="w-full text-left border-collapse">
+      <thead class="bg-gray-50 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+        <tr>
+          <th class="px-6 py-4">Customer</th>
+          <th class="px-6 py-4">Insurance Type</th>
+          <th class="px-6 py-4">Message</th>
+          <th class="px-6 py-4">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-200">
+        @for (lead of (assignedLeads$ | async); track lead.id) {
+          @if (lead.status !== 'resolved') {
+            <tr class="hover:bg-gray-50 transition-colors">
+              <td class="px-6 py-4">
+                <div class="font-bold text-gray-900">{{ lead.fullName }}</div>
+                <div class="text-xs text-gray-500">📞 {{ lead.phone }}</div>
+                <div class="text-xs text-gray-500">📧 {{ lead.email }}</div>
+              </td>
+              <td class="px-6 py-4">
+                <span class="px-2 py-1 rounded-full text-[10px] font-bold uppercase bg-indigo-100 text-indigo-700">
+                  {{ lead.type }}
+                </span>
+              </td>
+              <td class="px-6 py-4">
+                <p class="text-sm text-gray-600 italic truncate max-w-xs">
+                  "{{ lead.message }}"
+                </p>
+              </td>
+              <td class="px-6 py-4">
+                <button 
+                  (click)="resolveLead(lead)"
+                  class="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-indigo-700 transition shadow-sm"
+                >
+                  Send Resolution
+                </button>
+              </td>
+            </tr>
+          }
+        } @empty {
+          <tr>
+            <td colspan="4" class="px-6 py-10 text-center text-gray-400 italic">
+              No active leads assigned yet.
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
+<button 
       (click)="logout()" 
       class="bg-red-600 text-white px-4 py-2 rounded"
     >
       Logout
     </button>
-  </div>
-</div>
+<br><br>

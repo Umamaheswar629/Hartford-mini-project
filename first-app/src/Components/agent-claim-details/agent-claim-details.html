@@ -1,0 +1,71 @@
+<div class="p-6 max-w-3xl mx-auto">
+  <button (click)="goBack()" class="mb-4 text-blue-600 hover:underline">
+    ← Back to Dashboard
+  </button>
+
+  <button 
+      (click)="logout()" 
+      class="bg-red-600 text-white px-4 py-2 rounded"
+    >
+      Logout
+    </button>
+
+  @if (claimDetail$ | async; as data) {
+    <div class="bg-white shadow-md rounded-lg p-6 border border-gray-200">
+      <h2 class="text-2xl font-bold mb-4 border-b pb-2">Claim Management</h2>
+
+      <div class="grid grid-cols-2 gap-4 mb-6">
+        <div>
+          <h3 class="text-gray-500 text-sm uppercase">Customer Information</h3>
+          <p class="font-semibold">{{ data.customer.firstName }} {{ data.customer.lastName }}</p>
+          <p class="text-sm">{{ data.customer.address }}</p>
+        </div>
+        <div>
+          <h3 class="text-gray-500 text-sm uppercase">Policy Details</h3>
+          <p class="font-semibold">{{ data.policy.name }}</p>
+          <p class="text-sm">Coverage: {{ data.policy.coverage | currency:'INR' }}</p>
+        </div>
+      </div>
+
+      <div class="bg-gray-50 p-4 rounded mb-6">
+        <h3 class="text-gray-500 text-sm uppercase mb-1">Claim Request</h3>
+        <p><b>Amount:</b> {{ data.claim.amount | currency:'INR' }}</p>
+        <p><b>Description:</b> {{ data.claim.description }}</p>
+      </div>
+
+      <hr class="my-6">
+
+      <div class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Update Status</label>
+          <select [(ngModel)]="updatedStatus" class="mt-1 block w-full border border-gray-300 rounded-md p-2">
+            <option value="pending">Pending</option>
+            <option value="approved">Approved</option>
+            <option value="rejected">Rejected</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Agent Remarks</label>
+          <textarea 
+            [(ngModel)]="remarks" 
+            placeholder="Provide a reason for approval/rejection..."
+            class="mt-1 block w-full border border-gray-300 rounded-md p-2 h-24"
+          ></textarea>
+        </div>
+
+        <button
+          (click)="updateClaimStatus()"
+          class="w-full bg-blue-600 text-white py-2 rounded-md font-semibold hover:bg-blue-700 transition"
+        >
+          Submit Decision
+        </button>
+      </div>
+    </div>
+  } @else {
+    <div class="text-center py-20">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+      <p class="mt-4 text-gray-500">Fetching claim records...</p>
+    </div>
+  }
+</div>
