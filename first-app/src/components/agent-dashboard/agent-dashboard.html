@@ -1,4 +1,3 @@
-
 <header class="bg-white border-b border-gray-200 px-6 py-4 flex justify-between items-center relative">
   <h1 class="text-xl font-bold text-blue-700">Agent Portal</h1>
 
@@ -134,3 +133,56 @@
     </table>
   </div>
 </div>
+<h3 class="p-6 font-bold text-2xl text-gray-800">New Customer Leads</h3>
+<div class="ml-6 mr-6 bg-white shadow-sm border border-gray-200 rounded-xl overflow-hidden">
+  <div class="overflow-x-auto">
+    <table class="w-full text-left border-collapse">
+      <thead class="bg-gray-50 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+        <tr>
+          <th class="px-6 py-4">Customer</th>
+          <th class="px-6 py-4">Insurance Type</th>
+          <th class="px-6 py-4">Message</th>
+          <th class="px-6 py-4">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-200">
+        @for (lead of (assignedLeads$ | async); track lead.id) {
+          @if (lead.status !== 'resolved') {
+            <tr class="hover:bg-gray-50 transition-colors">
+              <td class="px-6 py-4">
+                <div class="font-bold text-gray-900">{{ lead.fullName }}</div>
+                <div class="text-xs text-gray-500">📞 {{ lead.phone }}</div>
+                <div class="text-xs text-gray-500">📧 {{ lead.email }}</div>
+              </td>
+              <td class="px-6 py-4">
+                <span class="px-2 py-1 rounded-full text-[10px] font-bold uppercase bg-indigo-100 text-indigo-700">
+                  {{ lead.type }}
+                </span>
+              </td>
+              <td class="px-6 py-4">
+                <p class="text-sm text-gray-600 italic truncate max-w-xs">
+                  "{{ lead.message }}"
+                </p>
+              </td>
+              <td class="px-6 py-4">
+                <button 
+                  (click)="resolveLead(lead)"
+                  class="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-indigo-700 transition shadow-sm"
+                >
+                  Send Resolution
+                </button>
+              </td>
+            </tr>
+          }
+        } @empty {
+          <tr>
+            <td colspan="4" class="px-6 py-10 text-center text-gray-400 italic">
+              No active leads assigned yet.
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
+<br><br>

@@ -1,0 +1,21 @@
+<div class="min-h-screen bg-gray-50">
+  <header class="bg-[#75013F] text-white shadow-lg px-6 py-4 flex justify-between items-center">
+    <h1 class="text-xl font-bold tracking-tight">Admin Control Center</h1>
+    <div class="flex items-center gap-4">
+      <span class="text-sm opacity-80">Welcome, Admin</span>
+      <button (click)="logout()" class="bg-[#F7F6E8] px-3 py-1 rounded text-xs transition text-[#75013F] cursor-pointer">Logout</button>
+    </div>
+  </header>
+
+  <nav class="bg-white border-b border-gray-200 flex overflow-x-auto">
+    <a routerLink="agents" routerLinkActive="border-indigo-600 text-indigo-600" class="px-6 py-3 border-b-2 border-transparent font-medium text-sm hover:text-indigo-600">Agent Management</a>
+    <a routerLink="enquiries" routerLinkActive="border-indigo-600 text-indigo-600" class="px-6 py-3 border-b-2 border-transparent font-medium text-sm hover:text-indigo-600">Customer Enquiries</a>
+    <a class="px-6 py-3 border-b-2 border-transparent font-medium text-sm hover:text-indigo-600">Policies</a>
+    <a class="px-6 py-3 border-b-2 border-transparent font-medium text-sm hover:text-indigo-600">Customers</a>
+    <a class="px-6 py-3 border-b-2 border-transparent font-medium text-sm hover:text-indigo-600">Claims</a>
+  </nav>
+
+  <main class="p-6">
+    <router-outlet></router-outlet>
+  </main>
+</div>

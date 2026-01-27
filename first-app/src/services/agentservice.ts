@@ -32,4 +32,22 @@ export class Agentservice {
   updateClaimStatus(claimId: string, status: string, remarks: string) {
     return this.http.patch(`${this.API}/claims/${claimId}`, {status,remarks});
   }
+  getAllAgents() {
+    return this.http.get<any[]>(`${this.API}/agents`);
+  }
+
+  updateAgent(agentId: string, agentData: any) {
+    return this.http.put(`${this.API}/agents/${agentId}`, agentData);
+  }
+
+  deleteAgent(agentId: string) {
+    return this.http.delete(`${this.API}/agents/${agentId}`);
+  }
+  getEnquiries() {
+    return this.http.get<any[]>(`${this.API}/enquiries`);
+  }
+
+  deleteEnquiry(id: string) {
+    return this.http.delete(`${this.API}/enquiries/${id}`);
+  }
 }

@@ -39,7 +39,7 @@
       "id": "A101",
       "userId": 2,
       "licenseNumber": "LIC12345",
-      "commissionRate": 500,
+      "commissionRate": 200,
       "assignedCustomers": [
         "C201"
       ],
@@ -99,7 +99,7 @@
       "type": "health",
       "amount": 45000,
       "date": "2024-02-01",
-      "status": "pending",
+      "status": "approved",
       "description": "Hospital treatment expenses",
       "documents": [
         "bill.pdf",
@@ -122,6 +122,32 @@
       ],
       "assignedAgentId": "A101",
       "remarks": ""
+    }
+  ],
+  "enquiries": [
+    {
+      "id": "f678",
+      "fullName": "saisrihitha kamtala",
+      "email": "saisrihitha.kamtala@gmail.com",
+      "phone": "9440846864",
+      "type": "vehicle",
+      "message": "vd,nfd",
+      "status": "resolved",
+      "assignedAgentId": "A101",
+      "createdAt": "2026-01-26T12:04:11.991Z",
+      "resolution": "nice"
+    },
+    {
+      "id": "f679",
+      "fullName": "saisrihitha",
+      "email": "saisrihitha.kamtala@gmail.com",
+      "phone": "9440846864",
+      "type": "life",
+      "message": "vd,nfd",
+      "status": "new",
+      "assignedAgentId": "A101",
+      "createdAt": "2026-01-26T12:04:11.991Z",
+      "resolution": "nice"
     }
   ]
 }

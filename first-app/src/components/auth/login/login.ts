@@ -8,7 +8,6 @@ import { Router } from '@angular/router';
   selector: 'app-login',
   imports: [FormsModule,CommonModule],
   templateUrl: './login.html',
-  styleUrl: './login.css',
 })
 export class Login {
   email = '';

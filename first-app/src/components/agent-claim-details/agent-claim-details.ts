@@ -10,7 +10,7 @@ import { BehaviorSubject, forkJoin } from 'rxjs';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './agent-claim-details.html',
-  styleUrl: './agent-claim-details.css',
+
 })
 export class AgentClaimDetails implements OnInit {
   private agentService = inject(Agentservice);
