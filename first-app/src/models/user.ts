@@ -8,4 +8,5 @@ export interface User {
   lastName: string;
   phone: string;
   createdAt: string;
+  token?:string;
 }

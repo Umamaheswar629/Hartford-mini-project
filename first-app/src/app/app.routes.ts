@@ -13,7 +13,7 @@ import { CustomerPortfolio } from '../Components/customer-portfolio/customer-por
 import { PolicyCatalog } from '../Components/policy-catalog/policy-catalog';
 import { RegisteredPolicies } from '../Components/registered-policies/registered-policies';
 import { PolicyDetailsComponent } from '../Components/policydetails/policydetails';
-import { AdminClaims } from '../Components/admin-claims/admin-claims';
+import { AdminClaim } from '../Components/admin-claims/admin-claims';
 
 
 
@@ -25,7 +25,7 @@ export const routes: Routes = [
     {path:'agents', component: AgentManagement},
     {path:'enquiries', component:EnquiryManagement},
     {path:'policies',component:PolicyManagement},
-    {path:'admin-claims', component:AdminClaims}
+    {path:'admin-claims', component:AdminClaim}
   ]},
   { path: 'agent/claim/:id', component: AgentClaimDetails },
   // {path:'claims', component:ClaimsComponent},

@@ -63,8 +63,8 @@ export class AuthService {
       const token = this.generateJWT(userWithoutPassword);
       
       // Store in localStorage
-      // localStorage.setItem('currentUser', JSON.stringify(userWithoutPassword));
-      // localStorage.setItem('authToken', token);
+      localStorage.setItem('currentUser', JSON.stringify(userWithoutPassword));
+      localStorage.setItem('authToken', token);
       
       // Update signal
       this.currentUserSignal.set(userWithoutPassword);
