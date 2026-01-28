@@ -140,4 +140,7 @@ export class AuthService {
 
     return `${base64Header}.${base64Payload}.${signature}`;
   }
+  getUser() {
+    return this.currentUserSignal();
+  }
 }

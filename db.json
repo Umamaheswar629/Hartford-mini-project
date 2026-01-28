@@ -259,6 +259,15 @@
       "type": "life",
       "amount": 54754,
       "description": "dghetjd"
+    },
+    {
+      "id": "4d48",
+      "status": "pending",
+      "date": "2026-01-27",
+      "policyId": "POL-002",
+      "type": "life",
+      "amount": 543,
+      "description": "tbhby"
     }
   ],
   "agents": [
@@ -284,6 +293,19 @@
       "totalPoliciesSold": 23,
       "status": "active",
       "joiningDate": "2023-09-15"
+    }
+  ],
+  "enquiries": [
+    {
+      "id": "02d0",
+      "fullName": "hellooo",
+      "email": "h@gmail.com",
+      "phone": "1234567890",
+      "type": "life",
+      "message": "testing enquiry form",
+      "status": "new",
+      "assignedAgentId": null,
+      "createdAt": "2026-01-28T04:52:07.913Z"
     }
   ]
 }
