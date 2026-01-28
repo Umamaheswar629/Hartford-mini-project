@@ -8,7 +8,15 @@ import { AgentManagement } from '../Components/agent-management/agent-management
 import { EnquiryManagement } from '../Components/enquiry-management/enquiry-management';
 import { PolicyManagement } from '../Components/policymanagement/policymanagement';
 import { Home } from '../Components/home/home';
- 
+import { CustomerDashboardComponent } from '../Components/customer-dashboard/customer-dashboard';
+import { CustomerPortfolio } from '../Components/customer-portfolio/customer-portfolio';
+import { PolicyCatalog } from '../Components/policy-catalog/policy-catalog';
+import { RegisteredPolicies } from '../Components/registered-policies/registered-policies';
+import { PolicyDetailsComponent } from '../Components/policydetails/policydetails';
+import { AdminClaims } from '../Components/admin-claims/admin-claims';
+
+
+
 export const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full'},
   {path:'home', component:Home},
@@ -17,10 +25,24 @@ export const routes: Routes = [
     {path:'agents', component: AgentManagement},
     {path:'enquiries', component:EnquiryManagement},
     {path:'policies',component:PolicyManagement},
+    {path:'admin-claims', component:AdminClaims}
   ]},
   { path: 'agent/claim/:id', component: AgentClaimDetails },
   // {path:'claims', component:ClaimsComponent},
   { path: 'agent/dashboard', component: AgentDashboard},
-  { path: 'customer/dashboard', component: ClaimsComponent },
+  // { path: 'customer/dashboard', component: CustomerDashboardComponent},
+  { 
+    path: 'customer/dashboard', 
+    children: [
+      { path: '', component: CustomerDashboardComponent }, 
+      { path: 'portfolio', component: CustomerPortfolio }, 
+      { path: 'catalog', component: PolicyCatalog },
+      { path: 'policies', component: RegisteredPolicies },
+      {path:'claims',component:ClaimsComponent},
+      { path: 'details/:id', component: PolicyDetailsComponent }
+    ] 
+  },
   { path: '**', redirectTo: '/auth' }
 ];
+
+
