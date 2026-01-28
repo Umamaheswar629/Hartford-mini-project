@@ -148,6 +148,17 @@
       "assignedAgentId": "A101",
       "createdAt": "2026-01-26T12:04:11.991Z",
       "resolution": "nice"
+    },
+    {
+      "id": "bf04",
+      "fullName": "dwe",
+      "email": "saisrihitha.kamtala@gmail.com",
+      "phone": "9440846864",
+      "type": "life",
+      "message": "ncsmd",
+      "status": "new",
+      "assignedAgentId": null,
+      "createdAt": "2026-01-27T09:27:44.142Z"
     }
   ]
 }
