@@ -1,0 +1,311 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "username": "admin",
+      "email": "admin@insuresure.com",
+      "password": "password123",
+      "role": "admin",
+      "firstName": "John",
+      "lastName": "Doe",
+      "phone": "9876543210",
+      "createdAt": "2024-01-15T10:30:00Z"
+    },
+    {
+      "id": "2",
+      "username": "agent001",
+      "email": "agent1@insuresure.com",
+      "password": "password123",
+      "role": "agent",
+      "firstName": "Sarah",
+      "lastName": "Wilson",
+      "phone": "9876543211",
+      "createdAt": "2024-01-16T09:20:00Z"
+    },
+    {
+      "id": "3",
+      "username": "customer001",
+      "email": "customer1@example.com",
+      "password": "password123",
+      "role": "customer",
+      "firstName": "Michael",
+      "lastName": "Brown",
+      "phone": "9876543212",
+      "createdAt": "2024-01-17T11:15:00Z"
+    },
+    {
+      "id": "615a",
+      "username": "umareddy",
+      "email": "umamaheswarreddy2113@gmail.com",
+      "password": "Umareddy@212212",
+      "role": "customer",
+      "firstName": "PAPIREDDY",
+      "lastName": "REDDY",
+      "phone": "6300973010",
+      "createdAt": "2026-01-27T04:04:02.402Z"
+    },
+    {
+      "id": "ee54",
+      "username": "dsfwaef",
+      "email": "vasi@gmail.com",
+      "password": "Umareddy@212212",
+      "role": "customer",
+      "firstName": "yeddi",
+      "lastName": "doir",
+      "phone": "6300983010",
+      "createdAt": "2026-01-27T04:04:59.929Z"
+    },
+    {
+      "id": "99de",
+      "username": "abcd...",
+      "email": "ranjan@guvi.com",
+      "password": "hellohello",
+      "role": "customer",
+      "firstName": "Ranjan",
+      "lastName": "Bhatnagar",
+      "phone": "9876543210",
+      "createdAt": "2026-01-27T11:44:55.291Z"
+    }
+  ],
+  "policies": [
+    {
+      "id": "POL-001",
+      "name": "Comprehensive Health Insurance",
+      "type": "health",
+      "premium": 12000,
+      "coverage": 500000,
+      "duration": 365,
+      "description": "Comprehensive health coverage including hospitalization, OPD, and critical illness",
+      "features": [
+        "Hospitalization",
+        "OPD",
+        "Critical Illness",
+        "Ambulance",
+        "Pre-existing diseases after 2 years"
+      ],
+      "createdAt": "2024-01-15T10:00:00Z"
+    },
+    {
+      "id": "POL-002",
+      "name": "Term Life Insurance",
+      "type": "life",
+      "premium": 8000,
+      "coverage": 1000000,
+      "duration": 365,
+      "description": "Affordable term life insurance with high coverage",
+      "features": [
+        "Death Benefit",
+        "Accidental Death Cover",
+        "Terminal Illness Rider"
+      ],
+      "createdAt": "2024-01-15T10:00:00Z"
+    },
+    {
+      "id": "POL-003",
+      "name": "Car Insurance - Comprehensive",
+      "type": "vehicle",
+      "premium": 15000,
+      "coverage": 800000,
+      "duration": 365,
+      "description": "Full coverage for your vehicle including third-party and own damage",
+      "features": [
+        "Own Damage",
+        "Third Party Liability",
+        "Zero Depreciation",
+        "Roadside Assistance"
+      ],
+      "createdAt": "2024-01-15T10:00:00Z"
+    },
+    {
+      "id": "P168",
+      "name": "sfnf",
+      "type": "life",
+      "premium": 12444,
+      "coverage": 222225,
+      "duration": 1,
+      "description": "hello",
+      "features": [],
+      "createdAt": ""
+    }
+  ],
+  "customers": [
+    {
+      "id": "CUST-001",
+      "userId": 3,
+      "policyIds": [
+        "POL-001",
+        "POL-002"
+      ],
+      "nominee": "Jane Brown",
+      "address": "123 Main Street, Mumbai, Maharashtra",
+      "dateOfBirth": "1990-05-15",
+      "aadharNumber": "123456789012",
+      "panNumber": "ABCDE1234F",
+      "kycStatus": "verified",
+      "createdAt": "2024-01-17T11:15:00Z"
+    },
+    {
+      "id": "CUST-002",
+      "userId": 5,
+      "policyIds": [
+        "POL-003"
+      ],
+      "nominee": "Maria Martinez",
+      "address": "456 Park Avenue, Delhi, Delhi",
+      "dateOfBirth": "1985-08-22",
+      "aadharNumber": "234567890123",
+      "panNumber": "FGHIJ5678K",
+      "kycStatus": "pending",
+      "createdAt": "2024-01-19T08:30:00Z"
+    }
+  ],
+  "claims": [
+    {
+      "id": "CLAIM-001",
+      "policyId": "POL-001",
+      "customerId": "CUST-001",
+      "type": "health",
+      "amount": 50000,
+      "date": "2024-01-20",
+      "status": "approved",
+      "description": "Hospitalization claim for surgery",
+      "documents": [
+        "bill1.jpg",
+        "report.pdf"
+      ],
+      "createdAt": "2024-01-20T09:00:00Z",
+      "remarks": "done!!!"
+    },
+    {
+      "id": "CLAIM-002",
+      "policyId": "POL-003",
+      "customerId": "CUST-002",
+      "type": "vehicle",
+      "amount": 25000,
+      "date": "2024-01-21",
+      "status": "approved",
+      "description": "Vehicle accident damage claim",
+      "documents": [
+        "accident_report.pdf",
+        "estimate.jpg"
+      ],
+      "createdAt": "2024-01-21T14:30:00Z"
+    },
+    {
+      "id": "fcbb",
+      "status": "rejected",
+      "date": "2026-01-27",
+      "policyId": "POL-003",
+      "type": "vehicle",
+      "amount": 346356,
+      "description": "fbsht",
+      "remarks": "shitttt"
+    },
+    {
+      "id": "b960",
+      "status": "approved",
+      "date": "2026-01-27",
+      "policyId": "POL-002",
+      "type": "life",
+      "amount": 365356,
+      "description": "fgetht",
+      "remarks": "rger"
+    },
+    {
+      "id": "14ca",
+      "status": "rejected",
+      "date": "2026-01-27",
+      "policyId": "POL-002",
+      "type": "life",
+      "amount": 5353,
+      "description": "dbete",
+      "remarks": ""
+    },
+    {
+      "id": "498f",
+      "status": "approved",
+      "date": "2026-01-27",
+      "policyId": "POL-002",
+      "type": "life",
+      "amount": 4352,
+      "description": "sfrgwe",
+      "remarks": "done"
+    },
+    {
+      "id": "f742",
+      "status": "approved",
+      "date": "2026-01-27",
+      "policyId": "P168",
+      "type": "life",
+      "amount": 3565,
+      "description": "dgheth",
+      "remarks": ""
+    },
+    {
+      "id": "172e",
+      "status": "approved",
+      "date": "2026-01-27",
+      "policyId": "POL-002",
+      "type": "life",
+      "amount": 3255,
+      "description": "hello",
+      "remarks": ""
+    },
+    {
+      "id": "d2d0",
+      "status": "pending",
+      "date": "2026-01-27",
+      "policyId": "POL-002",
+      "type": "life",
+      "amount": 54754,
+      "description": "dghetjd"
+    },
+    {
+      "id": "4d48",
+      "status": "pending",
+      "date": "2026-01-27",
+      "policyId": "POL-002",
+      "type": "life",
+      "amount": 543,
+      "description": "tbhby"
+    }
+  ],
+  "agents": [
+    {
+      "id": "AGT-001",
+      "userId": 2,
+      "licenseNumber": "LIC123456",
+      "commissionRate": 15,
+      "assignedCustomers": [
+        "CUST-001",
+        "CUST-002"
+      ],
+      "totalPoliciesSold": 45,
+      "status": "active",
+      "joiningDate": "2023-06-01"
+    },
+    {
+      "id": "AGT-002",
+      "userId": 4,
+      "licenseNumber": "LIC789012",
+      "commissionRate": 12,
+      "assignedCustomers": [],
+      "totalPoliciesSold": 23,
+      "status": "active",
+      "joiningDate": "2023-09-15"
+    }
+  ],
+  "enquiries": [
+    {
+      "id": "02d0",
+      "fullName": "hellooo",
+      "email": "h@gmail.com",
+      "phone": "1234567890",
+      "type": "life",
+      "message": "testing enquiry form",
+      "status": "new",
+      "assignedAgentId": null,
+      "createdAt": "2026-01-28T04:52:07.913Z"
+    }
+  ]
+}

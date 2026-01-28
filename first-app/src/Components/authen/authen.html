@@ -1,0 +1,239 @@
+
+<div class="min-h-screen flex items-center justify-center bg-gray-100 p-4">
+  <div class="w-full max-w-2xl">
+    
+    <!-- Header -->
+    <div class="text-center mb-6">
+      <h2 class="text-2xl font-bold">InsureSure</h2>
+      <p class="text-gray-600">
+        @if (isLoginMode()) {
+          Sign in to your account
+        } @else {
+          Create a new account
+        }
+      </p>
+    </div>
+
+    <!-- Auth Form -->
+    <div class="bg-white p-6 rounded shadow">
+      
+      <!-- Toggle Buttons -->
+      <div class="flex mb-6 border-b">
+        <button
+          type="button"
+          (click)="isLoginMode() || toggleMode()"
+          [class.border-b-2]="isLoginMode()"
+          [class.border-blue-600]="isLoginMode()"
+          [class.text-blue-600]="isLoginMode()"
+          class="flex-1 pb-2 font-medium"
+        >
+          Login
+        </button>
+        <button
+          type="button"
+          (click)="!isLoginMode() || toggleMode()"
+          [class.border-b-2]="!isLoginMode()"
+          [class.border-blue-600]="!isLoginMode()"
+          [class.text-blue-600]="!isLoginMode()"
+          class="flex-1 pb-2 font-medium"
+        >
+          Register
+        </button>
+      </div>
+
+      <form [formGroup]="authForm" (ngSubmit)="onSubmit()">
+        
+        <!-- Error Message -->
+        @if (errorMessage()) {
+          <div class="bg-red-100 text-red-700 p-3 rounded mb-4">
+            {{ errorMessage() }}
+          </div>
+        }
+
+        <!-- Success Message -->
+        @if (successMessage()) {
+          <div class="bg-green-100 text-green-700 p-3 rounded mb-4">
+            {{ successMessage() }}
+          </div>
+        }
+
+        <!-- REGISTER MODE ONLY - Role Selection -->
+        @if (!isLoginMode()) {
+          <div class="mb-4">
+            <label class="block mb-2 font-medium">Select Role</label>
+            <div class="grid grid-cols-2 gap-4">
+              <button
+                type="button"
+                (click)="selectRole('customer')"
+                [class.border-blue-600]="authForm.get('role')?.value === 'customer'"
+                [class.bg-blue-50]="authForm.get('role')?.value === 'customer'"
+                class="p-3 border-2 rounded"
+              >
+                Customer
+              </button>
+              <button
+                type="button"
+                (click)="selectRole('agent')"
+                [class.border-blue-600]="authForm.get('role')?.value === 'agent'"
+                [class.bg-blue-50]="authForm.get('role')?.value === 'agent'"
+                class="p-3 border-2 rounded"
+              >
+                Agent
+              </button>
+            </div>
+          </div>
+        }
+
+        <!-- REGISTER MODE ONLY - Name Fields -->
+        @if (!isLoginMode()) {
+          <div class="grid grid-cols-2 gap-4 mb-4">
+            <div>
+              <label class="block mb-2 font-medium">First Name</label>
+              <input
+                type="text"
+                formControlName="firstName"
+                class="w-full p-2 border rounded"
+                placeholder="John"
+              />
+              @if (authForm.get('firstName')?.invalid && authForm.get('firstName')?.touched) {
+                <p class="text-red-600 text-sm mt-1">Required</p>
+              }
+            </div>
+            <div>
+              <label class="block mb-2 font-medium">Last Name</label>
+              <input
+                type="text"
+                formControlName="lastName"
+                class="w-full p-2 border rounded"
+                placeholder="Doe"
+              />
+              @if (authForm.get('lastName')?.invalid && authForm.get('lastName')?.touched) {
+                <p class="text-red-600 text-sm mt-1">Required</p>
+              }
+            </div>
+          </div>
+        }
+
+        <!-- REGISTER MODE ONLY - Username -->
+        @if (!isLoginMode()) {
+          <div class="mb-4">
+            <label class="block mb-2 font-medium">Username</label>
+            <input
+              type="text"
+              formControlName="username"
+              class="w-full p-2 border rounded"
+              placeholder="johndoe"
+            />
+            @if (authForm.get('username')?.invalid && authForm.get('username')?.touched) {
+              <p class="text-red-600 text-sm mt-1">Min 3 characters</p>
+            }
+          </div>
+        }
+
+        <!-- Email (Both modes) -->
+        <div class="mb-4">
+          <label class="block mb-2 font-medium">Email</label>
+          <input
+            type="email"
+            formControlName="email"
+            class="w-full p-2 border rounded"
+            placeholder="Enter your email"
+          />
+          @if (authForm.get('email')?.invalid && authForm.get('email')?.touched) {
+            <p class="text-red-600 text-sm mt-1">Valid email required</p>
+          }
+        </div>
+
+        <!-- REGISTER MODE ONLY - Phone -->
+        @if (!isLoginMode()) {
+          <div class="mb-4">
+            <label class="block mb-2 font-medium">Phone Number</label>
+            <input
+              type="tel"
+              formControlName="phone"
+              class="w-full p-2 border rounded"
+              placeholder="9876543210"
+            />
+            @if (authForm.get('phone')?.invalid && authForm.get('phone')?.touched) {
+              <p class="text-red-600 text-sm mt-1">10 digits required</p>
+            }
+          </div>
+        }
+
+        <!-- Password (Both modes) -->
+        <div class="mb-4">
+          <label class="block mb-2 font-medium">Password</label>
+          <div class="relative">
+            <input
+              [type]="showPassword() ? 'text' : 'password'"
+              formControlName="password"
+              class="w-full p-2 border rounded"
+              placeholder="Enter password"
+            />
+            <button
+              type="button"
+              (click)="togglePassword()"
+              class="absolute right-2 top-2 text-gray-600 text-sm"
+            >
+              @if (showPassword()) {
+                Hide
+              } @else {
+                Show
+              }
+            </button>
+          </div>
+          @if (authForm.get('password')?.invalid && authForm.get('password')?.touched) {
+            <p class="text-red-600 text-sm mt-1">Min 6 characters</p>
+          }
+        </div>
+
+        <!-- REGISTER MODE ONLY - Confirm Password -->
+        @if (!isLoginMode()) {
+          <div class="mb-4">
+            <label class="block mb-2 font-medium">Confirm Password</label>
+            <input
+              [type]="showPassword() ? 'text' : 'password'"
+              formControlName="confirmPassword"
+              class="w-full p-2 border rounded"
+              placeholder="Confirm password"
+            />
+            @if (authForm.get('confirmPassword')?.invalid && authForm.get('confirmPassword')?.touched) {
+              <p class="text-red-600 text-sm mt-1">Required</p>
+            }
+          </div>
+        }
+
+        <!-- Submit Button -->
+        <button
+          type="submit"
+          [disabled]="authForm.invalid || isLoading()"
+          class="w-full bg-blue-600 text-white p-2 rounded disabled:bg-gray-400"
+        >
+          @if (isLoading()) {
+            @if (isLoginMode()) {
+              Signing in...
+            } @else {
+              Creating Account...
+            }
+          } @else {
+            @if (isLoginMode()) {
+              Sign In
+            } @else {
+              Create Account
+            }
+          }
+        </button>
+
+        <!-- LOGIN MODE ONLY - Demo Credentials -->
+        @if (isLoginMode()) {
+          <div class="mt-4 p-3 bg-gray-100 rounded text-sm">
+            <p class="font-bold mb-1">Demo Credentials:</p>
+            <p>Admin: admin@insuresure.com / password123</p>
+            <p>Agent: agent1@insuresure.com / password123</p>
+            <p>Customer: customer1@example.com / password123</p>
+          </div>
+        }
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,42 @@
+<div class="bg-white shadow rounded-lg p-6">
+  <h2 class="text-xl font-bold mb-6">Customer Leads Management</h2>
+  
+  <table class="w-full text-left border-collapse">
+    <thead class="bg-gray-50 uppercase text-xs font-bold text-gray-500">
+      <tr>
+        <th class="p-4">Customer</th>
+        <th class="p-4">Type</th>
+        <th class="p-4">Status</th>
+        <th class="p-4">Assign To Agent</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (item of (enquiries$) | async; track item.id) {
+        <tr class="border-b hover:bg-gray-50 transition">
+          <td class="p-4">
+            <div class="font-bold">{{ item.fullName }}</div>
+            <div class="text-xs text-gray-400">{{ item.email }}</div>
+          </td>
+          <td class="p-4 text-sm">{{ item.type }}</td>
+          <td class="p-4">
+            <span [class]="item.status === 'new' ? 'text-blue-600 bg-blue-50' : 'text-green-600 bg-green-50'" 
+                  class="px-2 py-1 rounded text-xs font-bold uppercase">
+              {{ item.status }}
+            </span>
+          </td>
+          <td class="p-4">
+            <select (change)="assignAgent(item.id, $event)" 
+                    class="border rounded p-1 text-sm bg-white focus:ring-2 focus:ring-indigo-500">
+              <option value="">Select Agent...</option>
+              @for (agent of agents; track agent.id) {
+                <option [value]="agent.id" [selected]="item.assignedAgentId === agent.id">
+                  {{ agent.id }} - (Rate: {{ agent.commissionRate }}%)
+                </option>
+              }
+            </select>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
