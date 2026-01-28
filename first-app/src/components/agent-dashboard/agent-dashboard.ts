@@ -4,6 +4,7 @@ import { Router } from '@angular/router'; // Add Router
 import { Agentservice } from '../../services/agentservice';
 import { BehaviorSubject, map } from 'rxjs';
 import { Enquiryservice } from '../../services/enquiryservice';
+import { AuthService } from '../../services/auth';
 @Component({
   selector: 'app-agent-dashboard',
   imports: [CommonModule],
@@ -13,6 +14,7 @@ export class AgentDashboard implements OnInit {
   private agentService = inject(Agentservice);
   private router = inject(Router);
   private enquiryService = inject(Enquiryservice);
+  private authService = inject(AuthService);
   assignedLeads$ = new BehaviorSubject<any[]>([]);
 
   userId!: number;
@@ -23,15 +25,20 @@ export class AgentDashboard implements OnInit {
   agentDetails: any = null;
 
   ngOnInit() {
-    const user = JSON.parse(localStorage.getItem('user')!);
-    if (!user || user.role !== 'agent') return;
+    // const user = JSON.parse(localStorage.getItem('user')!);
+    const user = this.authService.currentUser(); 
+    if (!user || user.role !== 'agent') {
+      this.router.navigate(['/']); // Redirect if not an agent
+      return;
+    }
 
     this.userId = user.id;
     this.loadAgentProfile(user);
     this.loadDashboardRows();
     
-  }
+  } 
   
+
   loadAgentProfile(userData: any) {
     this.agentService.getAgentByUserId(this.userId).subscribe(agents => {
       
@@ -45,8 +52,9 @@ export class AgentDashboard implements OnInit {
   }
   
   logout() {
-    localStorage.removeItem('user');
-    this.router.navigate(['/login']);
+    // 3. Use service logout
+    this.authService.logout();
+    this.router.navigate(['/auth']);
   }
   loadDashboardRows() {
     this.agentService.getAgentByUserId(this.userId).subscribe(agentData => {

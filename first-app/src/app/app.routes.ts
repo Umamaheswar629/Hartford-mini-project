@@ -13,36 +13,51 @@ import { CustomerPortfolio } from '../Components/customer-portfolio/customer-por
 import { PolicyCatalog } from '../Components/policy-catalog/policy-catalog';
 import { RegisteredPolicies } from '../Components/registered-policies/registered-policies';
 import { PolicyDetailsComponent } from '../Components/policydetails/policydetails';
-import { AdminClaims } from '../Components/admin-claims/admin-claims';
-
+import { roleGuard } from './guards/auth.guard';
 
 
 export const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full'},
-  {path:'home', component:Home},
+  { path: 'home', component: Home },
   { path: 'auth', component: AuthComponent },
-  { path: 'admin/dashboard', component: AdminDashbaord, children:[
-    {path:'agents', component: AgentManagement},
-    {path:'enquiries', component:EnquiryManagement},
-    {path:'policies',component:PolicyManagement},
-    {path:'admin-claims', component:AdminClaims}
-  ]},
-  { path: 'agent/claim/:id', component: AgentClaimDetails },
-  // {path:'claims', component:ClaimsComponent},
-  { path: 'agent/dashboard', component: AgentDashboard},
-  // { path: 'customer/dashboard', component: CustomerDashboardComponent},
+  
+  // PROTECTED ADMIN ROUTES
+  { 
+    path: 'admin/dashboard', 
+    component: AdminDashbaord, 
+    canActivate: [roleGuard(['admin'])],
+    children: [
+      { path: 'agents', component: AgentManagement },
+      { path: 'enquiries', component: EnquiryManagement },
+      { path: 'policies', component: PolicyManagement }
+    ]
+  },
+
+  // PROTECTED AGENT ROUTES
+  { 
+    path: 'agent/dashboard', 
+    component: AgentDashboard, 
+    canActivate: [roleGuard(['agent'])] 
+  },
+  { 
+    path: 'agent/claim/:id', 
+    component: AgentClaimDetails, 
+    canActivate: [roleGuard(['agent'])] 
+  },
+
+  // PROTECTED CUSTOMER ROUTES
   { 
     path: 'customer/dashboard', 
+    canActivate: [roleGuard(['customer'])],
     children: [
       { path: '', component: CustomerDashboardComponent }, 
       { path: 'portfolio', component: CustomerPortfolio }, 
       { path: 'catalog', component: PolicyCatalog },
       { path: 'policies', component: RegisteredPolicies },
-      {path:'claims',component:ClaimsComponent},
+      { path: 'claims', component: ClaimsComponent },
       { path: 'details/:id', component: PolicyDetailsComponent }
     ] 
   },
+  
   { path: '**', redirectTo: '/auth' }
 ];
-
-

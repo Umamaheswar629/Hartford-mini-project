@@ -18,28 +18,23 @@ export interface User {
 export class AuthService {
   private apiUrl = 'http://localhost:3000/users';
   
-  // Signal for current user
-  // private currentUserSignal = signal<User | null>(this.getUserFromStorage());
   private currentUserSignal = signal<User | null>(null);
+  // NEW: Signal to store the JWT in memory
+  private authTokenSignal = signal<string | null>(null);
   
-  // Computed signals
   currentUser = computed(() => this.currentUserSignal());
   isLoggedIn = computed(() => this.currentUserSignal() !== null);
   userRole = computed(() => this.currentUserSignal()?.role || '');
+  // NEW: Computed signal for the token
+  authToken = computed(() => this.authTokenSignal());
 
   constructor(private http: HttpClient) {}
 
-  /**
-   * Get user from localStorage
-   */
   private getUserFromStorage(): User | null {
     const storedUser = localStorage.getItem('currentUser');
     return storedUser ? JSON.parse(storedUser) : null;
   }
 
-  /**
-   * User Login
-   */
   async login(email: string, password: string): Promise<{ success: boolean; message: string; user?: User }> {
     try {
       const users = await this.http.get<User[]>(`${this.apiUrl}?email=${email}`).toPromise();
@@ -50,23 +45,17 @@ export class AuthService {
 
       const user = users[0];
       
-      // Check password
       if ((user as any).password !== password) {
         return { success: false, message: 'Invalid password' };
       }
 
-      // Remove password from user object
       const userWithoutPassword = { ...user };
       delete (userWithoutPassword as any).password;
 
-      // Generate JWT token
       const token = this.generateJWT(userWithoutPassword);
       
-      // Store in localStorage
-      // localStorage.setItem('currentUser', JSON.stringify(userWithoutPassword));
-      // localStorage.setItem('authToken', token);
-      
-      // Update signal
+      // UPDATED: Store both User and Token in signals
+      this.authTokenSignal.set(token);
       this.currentUserSignal.set(userWithoutPassword);
 
       return { success: true, message: 'Login successful', user: userWithoutPassword };
@@ -76,12 +65,8 @@ export class AuthService {
     }
   }
 
-  /**
-   * User Registration
-   */
   async register(userData: any): Promise<{ success: boolean; message: string }> {
     try {
-      // Check if email exists
       const existingUsers = await this.http.get<User[]>(`${this.apiUrl}?email=${userData.email}`).toPromise();
       
       if (existingUsers && existingUsers.length > 0) {
@@ -99,9 +84,7 @@ export class AuthService {
         createdAt: new Date().toISOString()
       };
 
-      // Add user to database
       await this.http.post<User>(this.apiUrl, newUser).toPromise();
-      
       return { success: true, message: 'Registration successful' };
     } catch (error) {
       console.error('Registration error:', error);
@@ -109,29 +92,19 @@ export class AuthService {
     }
   }
 
-  /**
-   * Logout
-   */
   logout(): void {
-    // REMOVED: localStorage.removeItem calls
     this.currentUserSignal.set(null);
+    this.authTokenSignal.set(null); // NEW: Clear token
   }
 
-  /**
-   * Generate JWT Token
-   */
   private generateJWT(user: User): string {
-    const header = {
-      alg: 'HS256',
-      typ: 'JWT'
-    };
-
+    const header = { alg: 'HS256', typ: 'JWT' };
     const payload = {
       sub: user.id,
       email: user.email,
       role: user.role,
       iat: Date.now(),
-      exp: Date.now() + 24 * 60 * 60 * 1000 // 24 hours
+      exp: Date.now() + 24 * 60 * 60 * 1000
     };
 
     const base64Header = btoa(JSON.stringify(header));
@@ -140,6 +113,7 @@ export class AuthService {
 
     return `${base64Header}.${base64Payload}.${signature}`;
   }
+
   getUser() {
     return this.currentUserSignal();
   }

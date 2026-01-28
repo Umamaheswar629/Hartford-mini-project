@@ -1,5 +1,6 @@
 import { Component,inject } from '@angular/core';
 import { RouterOutlet ,Router, RouterLink, RouterLinkActive} from '@angular/router';
+import { AuthService } from '../../services/auth';
 @Component({
   selector: 'app-admin-dashbaord',
   imports: [RouterOutlet,RouterLink,RouterLinkActive],
@@ -8,9 +9,11 @@ import { RouterOutlet ,Router, RouterLink, RouterLinkActive} from '@angular/rout
 })
 export class AdminDashbaord {
   private router = inject(Router);
+  private authService = inject(AuthService);
 
-  logout() {
-    localStorage.removeItem('user');
+  
+  logout(): void {
+    this.authService.logout();
     this.router.navigate(['/login']);
   }
 }
