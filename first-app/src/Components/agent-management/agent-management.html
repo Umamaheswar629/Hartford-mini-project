@@ -1,0 +1,92 @@
+<div class="bg-white shadow rounded-lg overflow-hidden">
+  <table class="w-full text-left text-sm">
+    <thead class="bg-gray-50 border-b">
+      <tr>
+        <th class="px-6 py-3 font-semibold">Agent ID</th>
+        <th class="px-6 py-3 font-semibold">License</th>
+        <th class="px-6 py-3 font-semibold text-right">Actions</th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-gray-100">
+      @for (agent of (agents$ | async); track agent.id) {
+        <tr class="hover:bg-gray-50">
+          <td class="px-6 py-4 font-medium">{{ agent.id }}</td>
+          <td class="px-6 py-4">{{ agent.licenseNumber }}</td>
+          <td class="px-6 py-4 text-right space-x-3">
+            <button (click)="viewAgent(agent)" class="text-green-600 hover:text-green-800 font-medium">
+              View
+            </button>
+            <button (click)="editAgent(agent)" class="text-indigo-600 hover:text-indigo-800 font-medium">
+              Edit
+            </button>
+            <button (click)="deleteAgent(agent.id)" class="text-red-600 hover:text-red-800 font-medium">
+              Delete
+            </button>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
+
+@if (viewingAgent) {
+  <div class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+    <div class="bg-white rounded-xl shadow-2xl w-full max-w-md overflow-hidden">
+      <div class="bg-green-600 p-4 text-white flex justify-between items-center">
+        <h3 class="font-bold text-lg">Agent Profile: {{ viewingAgent.id }}</h3>
+        <button (click)="viewingAgent = null" class="text-2xl leading-none">&times;</button>
+      </div>
+      
+      <div class="p-6 space-y-4">
+        <div class="flex justify-between border-b pb-2">
+          <span class="text-gray-500">License Number</span>
+          <span class="font-semibold">{{ viewingAgent.licenseNumber }}</span>
+        </div>
+        <div class="flex justify-between border-b pb-2">
+          <span class="text-gray-500">Commission Rate</span>
+          <span class="font-semibold text-blue-600">{{ viewingAgent.commissionRate }}%</span>
+        </div>
+        <div class="flex justify-between border-b pb-2">
+          <span class="text-gray-500">Total Policies Sold</span>
+          <span class="font-semibold text-green-600">{{ viewingAgent.totalPoliciesSold }}</span>
+        </div>
+        <div class="bg-gray-50 p-3 rounded text-xs text-gray-500">
+          <strong>Assigned Customers:</strong>
+          <ul class="mt-1 list-disc list-inside">
+            @for (cId of viewingAgent.assignedCustomers; track cId) {
+              <li>{{ cId }}</li>
+            } @empty {
+              <li>No customers assigned yet.</li>
+            }
+          </ul>
+        </div>
+      </div>
+
+      <div class="p-4 bg-gray-50 flex justify-end">
+        <button (click)="viewingAgent = null" class="px-6 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+}
+
+
+@if (selectedAgent) {
+  <div class="fixed inset-0 bg-black/50 flex items-center justify-center p-4">
+    <div class="bg-white p-6 rounded-lg shadow-xl w-full max-w-md">
+      <h3 class="text-lg font-bold mb-4">Edit Agent: {{ selectedAgent.id }}</h3>
+      
+      <label class="block text-xs font-bold text-gray-500 uppercase">License Number</label>
+      <input [(ngModel)]="selectedAgent.licenseNumber" class="w-full border p-2 rounded mt-1 mb-4">
+
+      <label class="block text-xs font-bold text-gray-500 uppercase">Commission Rate (%)</label>
+      <input type="number" [(ngModel)]="selectedAgent.commissionRate" class="w-full border p-2 rounded mt-1 mb-4">
+
+      <div class="flex justify-end gap-2">
+        <button (click)="selectedAgent = null" class="px-4 py-2 bg-gray-200 rounded">Cancel</button>
+        <button (click)="saveAgent()" class="px-4 py-2 bg-indigo-600 text-white rounded">Save Changes</button>
+      </div>
+    </div>
+  </div>
+}
