@@ -8,7 +8,7 @@ import { AgentManagement } from '../Components/agent-management/agent-management
 import { EnquiryManagement } from '../Components/enquiry-management/enquiry-management';
 import { PolicyManagement } from '../Components/policymanagement/policymanagement';
 import { Home } from '../Components/home/home';
-import { CustomerDashboard } from '../Components/customer-dashboard/customer-dashboard';
+import { CustomerDashboardComponent } from '../Components/customer-dashboard/customer-dashboard';
 import { CustomerPortfolio } from '../Components/customer-portfolio/customer-portfolio';
 import { PolicyCatalog } from '../Components/policy-catalog/policy-catalog';
 import { RegisteredPolicies } from '../Components/registered-policies/registered-policies';
@@ -34,7 +34,7 @@ export const routes: Routes = [
   { 
     path: 'customer/dashboard', 
     children: [
-      { path: '', component: CustomerDashboard }, 
+      { path: '', component: CustomerDashboardComponent }, 
       { path: 'portfolio', component: CustomerPortfolio }, 
       { path: 'catalog', component: PolicyCatalog },
       { path: 'policies', component: RegisteredPolicies },
