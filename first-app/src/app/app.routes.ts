@@ -14,6 +14,8 @@ import { PolicyCatalog } from '../Components/policy-catalog/policy-catalog';
 import { RegisteredPolicies } from '../Components/registered-policies/registered-policies';
 import { PolicyDetailsComponent } from '../Components/policydetails/policydetails';
 import { roleGuard } from './guards/auth.guard';
+import { AdminClaim } from '../Components/admin-claims/admin-claims';
+import { AdminStats } from '../Components/admin-stats/admin-stats';
 
 
 export const routes: Routes = [
@@ -27,9 +29,12 @@ export const routes: Routes = [
     component: AdminDashbaord, 
     canActivate: [roleGuard(['admin'])],
     children: [
+      { path: '', redirectTo: 'stats', pathMatch: 'full' },
       { path: 'agents', component: AgentManagement },
       { path: 'enquiries', component: EnquiryManagement },
-      { path: 'policies', component: PolicyManagement }
+      { path: 'policies', component: PolicyManagement },
+      { path: 'admin-claims', component:AdminClaim},
+      { path:'stats', component:AdminStats}
     ]
   },
 

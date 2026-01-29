@@ -77,8 +77,12 @@
 
 </div>
 <div class="p-6">
-  <h2 class="text-2xl font-bold mb-6 text-gray-800">Assigned Claims</h2>
-
+<div class="p-6 flex justify-between items-center">
+  <h2 class="text-2xl font-bold text-gray-800">Assigned Claims</h2>
+  <button (click)="loadDashboardRows()" class="text-sm text-blue-600 cursor-pointer">
+    🔄 Refresh Data
+  </button>
+</div>
   <div class="overflow-hidden rounded-lg border border-gray-200 shadow-sm">
     <table class="w-full border-collapse bg-white text-left text-sm text-gray-500">
       <thead class="bg-gray-50">

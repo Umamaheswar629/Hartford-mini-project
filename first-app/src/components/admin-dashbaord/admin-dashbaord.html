@@ -8,15 +8,19 @@
   </header>
 
   <nav class="bg-white border-b border-gray-200 flex overflow-x-auto">
+    <a (click)="showStats = !showStats" routerLink="stats" routerLinkActive="border-indigo-600 text-indigo-600" class="px-6 py-3 border-b-2 border-transparent font-medium text-sm hover:text-indigo-600 cursor-pointer" [class.border-indigo-600]="showStats" [class.text-indigo-600]="showStats">
+      Statistics
+    </a>
     <a routerLink="agents" routerLinkActive="border-indigo-600 text-indigo-600" class="px-6 py-3 border-b-2 border-transparent font-medium text-sm hover:text-indigo-600">Agent Management</a>
     <a routerLink="enquiries" routerLinkActive="border-indigo-600 text-indigo-600" class="px-6 py-3 border-b-2 border-transparent font-medium text-sm hover:text-indigo-600">Customer Enquiries</a>
     <a routerLink="policies" routerLinkActive="border-indigo-600 text-indigo-600" class="px-6 py-3 border-b-2 border-transparent font-medium text-sm hover:text-indigo-600">Policies</a>
-
-    <!-- <a class="px-6 py-3 border-b-2 border-transparent font-medium text-sm hover:text-indigo-600">Customers</a> -->
-    <a routerLink="admin-claims" class="px-6 py-3 border-b-2 border-transparent font-medium text-sm hover:text-indigo-600">Claims</a>   
+    <a routerLink="admin-claims" routerLinkActive="border-indigo-600 text-indigo-600" class="px-6 py-3 border-b-2 border-transparent font-medium text-sm hover:text-indigo-600">Claims</a>
+    
   </nav>
 
   <main class="p-6">
+
+
     <router-outlet></router-outlet>
   </main>
 </div>

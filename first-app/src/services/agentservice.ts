@@ -1,6 +1,7 @@
 import { Injectable,inject} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-
+import { User } from '../models/user';
+import { Customer } from '../models/customer';
 @Injectable({
   providedIn: 'root'
 })
@@ -8,24 +9,28 @@ export class Agentservice {
   private API = 'http://localhost:3000';
   private http = inject(HttpClient);
 
-  getAgentByUserId(userId: number) {
+  getAgentByUserId(userId: string) {
     return this.http.get<any[]>(`${this.API}/agents?userId=${userId}`);
   }
   getClaimsByAgent(agentId: string) {
   return this.http.get<any[]>(`${this.API}/claims?assignedAgentId=${agentId}`);
   }
-  getUserById(userId: number) {
-    return this.http.get<any>(`${this.API}/users/${userId}`);
-  }
+// GET a single user by string ID
+getUserById(id: string) { 
+  return this.http.get<User>(`${this.API}/users/${id}`);
+}
+
+
   getClaimById(claimId: string) {
     return this.http.get<any>(`${this.API}/claims/${claimId}`);
   }
   getClaimsByCustomer(customerId: string) {
     return this.http.get<any[]>(`${this.API}/claims?customerId=${customerId}`);
   }
-  getCustomerById(customerId: string) {
-    return this.http.get<any>(`${this.API}/customers/${customerId}`);
-  }
+// GET a single customer by string ID
+getCustomerById(id: string) {
+  return this.http.get<Customer>(`${this.API}/customers/${id}`);
+}
   getPolicyById(policyId: string) {
     return this.http.get<any>(`${this.API}/policies/${policyId}`);
   }

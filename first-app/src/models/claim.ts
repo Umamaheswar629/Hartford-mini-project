@@ -8,5 +8,6 @@ export interface Claim {
   status: 'pending' | 'approved' | 'rejected';
   description: string;
   documents: string[];
-  remarks?: string;
+  remarks?: string,
+  assignedAgentId?: string;
 }

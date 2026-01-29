@@ -5,6 +5,8 @@ import { Agentservice } from '../../services/agentservice';
 import { BehaviorSubject, map } from 'rxjs';
 import { Enquiryservice } from '../../services/enquiryservice';
 import { AuthService } from '../../services/auth';
+import { of,catchError } from 'rxjs';
+
 @Component({
   selector: 'app-agent-dashboard',
   imports: [CommonModule],
@@ -17,7 +19,7 @@ export class AgentDashboard implements OnInit {
   private authService = inject(AuthService);
   assignedLeads$ = new BehaviorSubject<any[]>([]);
 
-  userId!: number;
+  userId!: string;
   private rowsSubject = new BehaviorSubject<any[]>([]);
   customersAssigned$ = this.rowsSubject.asObservable();
   showProfileDropdown = false;
@@ -32,7 +34,8 @@ export class AgentDashboard implements OnInit {
       return;
     }
 
-    this.userId = user.id;
+    // this.userId = user.id;
+    this.userId = user.id.toString();
     this.loadAgentProfile(user);
     this.loadDashboardRows();
     
@@ -57,38 +60,58 @@ export class AgentDashboard implements OnInit {
     this.router.navigate(['/auth']);
   }
   loadDashboardRows() {
-    this.agentService.getAgentByUserId(this.userId).subscribe(agentData => {
-      if (!agentData.length) return;
-      const agentId = agentData[0].id;
-      this.agentDetails = agentData[0];
-      this.enquiryService.getEnquiriesByAgent(agentId).subscribe(leads => {
-        this.assignedLeads$.next(leads);
-      });
-      this.agentService.getClaimsByAgent(agentId).subscribe(claims => {
-        const rows: any[] = [];
-        
-        claims.forEach(claim => {
-          // Fetch Customer , then fetch User to get Name
-          this.agentService.getCustomerById(claim.customerId).subscribe(customer => {
-            // Fetch user data for the customer's name
-            this.agentService.getUserById(customer.userId).subscribe(userData => {
-              this.agentService.getPolicyById(claim.policyId).subscribe(policy => {
-                const row = {
-                  customerName: `${userData.firstName} ${userData.lastName}`,
-                  address: customer.address,
-                  policyName: policy.name,
-                  claimId: claim.id,
-                  status: claim.status
-                };
-                rows.push(row);
-                this.rowsSubject.next([...rows]);
-              });
-            });
-          });
+  this.agentService.getAgentByUserId(this.userId).subscribe(agentData => {
+    if (!agentData.length) return;
+    const agentId = agentData[0].id;
+
+    // Fetch Enquiries
+    this.enquiryService.getEnquiriesByAgent(agentId).subscribe(leads => {
+      this.assignedLeads$.next(leads);
+    });
+
+    // Fetch Claims
+    this.agentService.getClaimsByAgent(agentId).subscribe(claims => {
+      console.log("Claims received:", claims);
+      const rows: any[] = [];
+      
+      // Clear the table first if no claims exist
+      if (claims.length === 0) {
+        this.rowsSubject.next([]);
+        return;
+      }
+
+claims.forEach(claim => {
+  this.agentService.getCustomerById(claim.customerId).subscribe({
+    next: (customer) => {
+      if (!customer) return;
+
+      // Handle the potential 404 here
+      this.agentService.getUserById(customer.userId).pipe(
+        catchError(err => {
+          console.error(`User ${customer.userId} missing!`, err);
+          // Return a mock user so the row still displays something
+          return of({ firstName: 'User', lastName: 'Not Found', email: 'N/A' });
+        })
+      ).subscribe(userData => {
+        this.agentService.getPolicyById(claim.policyId).subscribe(policy => {
+          const row = {
+            customerName: userData ? `${userData.firstName} ${userData.lastName}` : 'Unknown',
+            address: customer.address || 'N/A',
+            policyName: policy ? policy.name : 'Unknown Policy',
+            claimId: claim.id,
+            status: claim.status
+          };
+          rows.push(row);
+          this.rowsSubject.next([...rows]);
         });
       });
+    }
+  });
+});
     });
-  }
+  });
+}
+
   resolveLead(lead: any) {
   const resolution = prompt("Enter the resolution message for the customer:");
   

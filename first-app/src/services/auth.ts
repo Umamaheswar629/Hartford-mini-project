@@ -49,11 +49,13 @@ export class AuthService {
         return { success: false, message: 'Invalid password' };
       }
 
+      const token = this.generateJWT(user);
+      console.log("DEBUG: My Generated JWT Token is:", token);
+      await this.http.patch(`${this.apiUrl}/${user.id}`, { token: token }).toPromise();
       const userWithoutPassword = { ...user };
       delete (userWithoutPassword as any).password;
 
-      const token = this.generateJWT(userWithoutPassword);
-      
+    
       // UPDATED: Store both User and Token in signals
       this.authTokenSignal.set(token);
       this.currentUserSignal.set(userWithoutPassword);
