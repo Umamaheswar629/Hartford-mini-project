@@ -25,7 +25,10 @@ export class ClaimsComponent implements OnInit, OnDestroy {
   policies: Policy[] = [];
   claimHistory: Claim[] = [];
   currentCustomerId: string | null = null;
-  
+  selectedDocuments: { [key: string]: string } = {
+    PAN: '',
+    Aadhar: ''
+  };
   private claimsSub?: Subscription;
 
   newClaim: Partial<Claim> = {
@@ -98,18 +101,25 @@ export class ClaimsComponent implements OnInit, OnDestroy {
       ...(this.newClaim as Claim),
       customerId: this.currentCustomerId,
       assignedAgentId: '', // Admin will assign this later
-    
+      documents: this.selectedDocuments
     };
 
     this.claimService.submitClaim(finalClaim).subscribe({
       next: () => {
         alert('Claim submitted successfully!');
+        this.selectedDocuments = {};
         this.resetForm();
       },
       error: (err) => console.error('Submission failed', err)
     });
   }
-
+onFileSelected(event: any, docType: string) {
+    const file = event.target.files[0];
+    if (file) {
+      this.selectedDocuments[docType] = file.name;
+      this.cdr.detectChanges();
+    }
+  }
   resetForm() {
     this.newClaim = {
       status: 'pending',
@@ -118,6 +128,7 @@ export class ClaimsComponent implements OnInit, OnDestroy {
       description: '',
       remarks: ''
     };
+    this.selectedDocuments = { PAN: '', Aadhar: '' };
     this.cdr.detectChanges();
   }
 

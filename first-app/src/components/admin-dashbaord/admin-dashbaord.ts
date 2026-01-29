@@ -2,9 +2,7 @@ import { Component,inject } from '@angular/core';
 import { RouterOutlet ,Router, RouterLink, RouterLinkActive} from '@angular/router';
 import { AuthService } from '../../services/auth';
 import { ClaimService } from '../../services/claim-service';
-import { map,Observable, combineLatest } from 'rxjs';
 import { Agentservice } from '../../services/agentservice';
-import { AsyncPipe } from '@angular/common';
 @Component({
   selector: 'app-admin-dashbaord',
   imports: [RouterOutlet,RouterLink,RouterLinkActive],

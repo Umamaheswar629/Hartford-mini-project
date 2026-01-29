@@ -15,7 +15,7 @@
 
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
     @for (policy of registeredPolicies$ | async; track policy.id) {
-      <div class="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+      <div class="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col">
         <div class="p-5 border-b border-gray-50 bg-gradient-to-r from-white to-gray-50">
           <div class="flex justify-between items-start">
             <h3 class="font-bold text-xl text-gray-900">{{ policy.name }}</h3>
@@ -26,7 +26,7 @@
           <p class="text-xs text-indigo-500 font-bold uppercase mt-1 tracking-widest">{{ policy.type }} Insurance</p>
         </div>
 
-        <div class="p-6 space-y-4">
+        <div class="p-6 space-y-4 flex-grow">
           <div class="flex justify-between items-center">
             <span class="text-gray-500 text-sm">Sum Insured</span>
             <span class="text-gray-900 font-bold text-lg">₹{{ policy.coverage | number }}</span>
@@ -39,28 +39,21 @@
             <span class="text-gray-500 text-sm">Policy Term</span>
             <span class="text-gray-700 text-sm font-medium">{{ policy.duration }} Years</span>
           </div>
+        </div>
 
+        <div class="p-6 pt-0 space-y-2">
           <button (click)="viewDetails(policy.id)" 
                   class="w-full py-3 text-sm font-bold text-white bg-indigo-600 rounded-xl hover:bg-indigo-700 transition shadow-md shadow-indigo-100">
             View Policy Documents
           </button>
+          
+          <button (click)="cancelPolicy(policy.id)" 
+                  class="w-full py-3 text-sm font-bold text-red-600 border border-red-200 rounded-xl hover:bg-red-50 transition">
+            Cancel Policy
+          </button>
         </div>
       </div>
     } @empty {
-      @if (!loading) {
-        <div class="col-span-full bg-white border-2 border-dashed border-gray-200 rounded-3xl p-12 text-center">
-          <div class="bg-indigo-50 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-            </svg>
-          </div>
-          <h3 class="text-lg font-bold text-gray-800">No Registered Policies</h3>
-          <p class="text-gray-500 max-w-xs mx-auto mt-2">You haven't purchased any insurance plans yet. Browse our catalog to secure your future.</p>
-          <button routerLink="/customer/catalog" class="mt-6 text-indigo-600 font-bold hover:underline">
-            Explore Policies &rarr;
-          </button>
-        </div>
       }
-    }
   </div>
 </div>

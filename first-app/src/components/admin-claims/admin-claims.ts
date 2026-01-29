@@ -36,8 +36,6 @@ private refreshSubject = new BehaviorSubject<void>(undefined);
     }))
   );
 
-  // The Main Data Stream: Reacts to refresh, search, and sort changes
-  // Using Polling (refresh every 10s) + Manual triggers
   filteredClaims$: Observable<Claim[]> = combineLatest([
     this.refreshSubject.pipe(
       switchMap(() => interval(10000).pipe(startWith(0))), // Auto-poll every 10s
