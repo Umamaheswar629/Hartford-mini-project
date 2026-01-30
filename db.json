@@ -9,7 +9,8 @@
       "firstName": "John",
       "lastName": "Doe",
       "phone": "9876543210",
-      "createdAt": "2024-01-15T10:30:00Z"
+      "createdAt": "2024-01-15T10:30:00Z",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJhZG1pbkBpbnN1cmVzdXJlLmNvbSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc2OTcwODM2MjY3NywiZXhwIjoxNzY5Nzk0NzYyNjc3fQ==.aW5zdXJlc3VyZS1zZWNyZXQta2V5"
     },
     {
       "id": "2",
@@ -20,7 +21,8 @@
       "firstName": "Sarah",
       "lastName": "Wilson",
       "phone": "9876543211",
-      "createdAt": "2024-01-16T09:20:00Z"
+      "createdAt": "2024-01-16T09:20:00Z",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyIiwiZW1haWwiOiJhZ2VudDFAaW5zdXJlc3VyZS5jb20iLCJyb2xlIjoiYWdlbnQiLCJpYXQiOjE3Njk3MDkxNzEzNTcsImV4cCI6MTc2OTc5NTU3MTM1N30=.aW5zdXJlc3VyZS1zZWNyZXQta2V5"
     },
     {
       "id": "3",
@@ -31,40 +33,54 @@
       "firstName": "Michael",
       "lastName": "Brown",
       "phone": "9876543212",
-      "createdAt": "2024-01-17T11:15:00Z"
+      "createdAt": "2024-01-17T11:15:00Z",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzIiwiZW1haWwiOiJjdXN0b21lcjFAZXhhbXBsZS5jb20iLCJyb2xlIjoiY3VzdG9tZXIiLCJpYXQiOjE3Njk3MDk5NTEwMzAsImV4cCI6MTc2OTc5NjM1MTAzMH0=.aW5zdXJlc3VyZS1zZWNyZXQta2V5"
     },
     {
-      "id": "615a",
-      "username": "umareddy",
-      "email": "umamaheswarreddy2113@gmail.com",
-      "password": "Umareddy@212212",
-      "role": "customer",
-      "firstName": "PAPIREDDY",
-      "lastName": "REDDY",
-      "phone": "6300973010",
-      "createdAt": "2026-01-27T04:04:02.402Z"
+      "id": "4",
+      "username": "agent002",
+      "email": "david@insuresure.com",
+      "password": "password123",
+      "role": "agent",
+      "firstName": "David",
+      "lastName": "Miller",
+      "phone": "9876543213",
+      "createdAt": "2024-02-01T10:00:00Z",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0IiwiZW1haWwiOiJkYXZpZEBpbnN1cmVzdXJlLmNvbSIsInJvbGUiOiJhZ2VudCIsImlhdCI6MTc2OTYyNDYwNTYwNiwiZXhwIjoxNzY5NzExMDA1NjA2fQ==.aW5zdXJlc3VyZS1zZWNyZXQta2V5"
     },
     {
-      "id": "ee54",
-      "username": "dsfwaef",
-      "email": "vasi@gmail.com",
-      "password": "Umareddy@212212",
+      "id": "5",
+      "username": "customer002",
+      "email": "maria@example.com",
+      "password": "password123",
       "role": "customer",
-      "firstName": "yeddi",
-      "lastName": "doir",
-      "phone": "6300983010",
-      "createdAt": "2026-01-27T04:04:59.929Z"
+      "firstName": "Maria",
+      "lastName": "Martinez",
+      "phone": "9876543214",
+      "createdAt": "2024-02-02T11:00:00Z"
     },
     {
-      "id": "99de",
-      "username": "abcd...",
-      "email": "ranjan@guvi.com",
-      "password": "hellohello",
+      "id": "6",
+      "username": "agent003",
+      "email": "emma@insuresure.com",
+      "password": "password123",
+      "role": "agent",
+      "firstName": "Emma",
+      "lastName": "Davis",
+      "phone": "9876543215",
+      "createdAt": "2024-02-05T09:00:00Z",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2IiwiZW1haWwiOiJlbW1hQGluc3VyZXN1cmUuY29tIiwicm9sZSI6ImFnZW50IiwiaWF0IjoxNzY5NjIyMzczMTk4LCJleHAiOjE3Njk3MDg3NzMxOTh9.aW5zdXJlc3VyZS1zZWNyZXQta2V5"
+    },
+    {
+      "id": "7",
+      "username": "customer003",
+      "email": "robert@example.com",
+      "password": "password123",
       "role": "customer",
-      "firstName": "Ranjan",
-      "lastName": "Bhatnagar",
-      "phone": "9876543210",
-      "createdAt": "2026-01-27T11:44:55.291Z"
+      "firstName": "Robert",
+      "lastName": "Taylor",
+      "phone": "9876543216",
+      "createdAt": "2024-02-10T14:00:00Z"
     }
   ],
   "policies": [
@@ -75,13 +91,10 @@
       "premium": 12000,
       "coverage": 500000,
       "duration": 365,
-      "description": "Comprehensive health coverage including hospitalization, OPD, and critical illness",
+      "description": "Comprehensive health coverage",
       "features": [
         "Hospitalization",
-        "OPD",
-        "Critical Illness",
-        "Ambulance",
-        "Pre-existing diseases after 2 years"
+        "OPD"
       ],
       "createdAt": "2024-01-15T10:00:00Z"
     },
@@ -92,11 +105,9 @@
       "premium": 8000,
       "coverage": 1000000,
       "duration": 365,
-      "description": "Affordable term life insurance with high coverage",
+      "description": "Affordable term life insurance",
       "features": [
-        "Death Benefit",
-        "Accidental Death Cover",
-        "Terminal Illness Rider"
+        "Death Benefit"
       ],
       "createdAt": "2024-01-15T10:00:00Z"
     },
@@ -107,37 +118,22 @@
       "premium": 15000,
       "coverage": 800000,
       "duration": 365,
-      "description": "Full coverage for your vehicle including third-party and own damage",
+      "description": "Full vehicle coverage",
       "features": [
-        "Own Damage",
-        "Third Party Liability",
-        "Zero Depreciation",
-        "Roadside Assistance"
+        "Third Party Liability"
       ],
       "createdAt": "2024-01-15T10:00:00Z"
-    },
-    {
-      "id": "P168",
-      "name": "sfnf",
-      "type": "life",
-      "premium": 12444,
-      "coverage": 222225,
-      "duration": 1,
-      "description": "hello",
-      "features": [],
-      "createdAt": ""
     }
   ],
   "customers": [
     {
       "id": "CUST-001",
-      "userId": 3,
+      "userId": "3",
       "policyIds": [
-        "POL-001",
-        "POL-002"
+        "POL-001"
       ],
       "nominee": "Jane Brown",
-      "address": "123 Main Street, Mumbai, Maharashtra",
+      "address": "123 Main Street, Mumbai",
       "dateOfBirth": "1990-05-15",
       "aadharNumber": "123456789012",
       "panNumber": "ABCDE1234F",
@@ -146,134 +142,37 @@
     },
     {
       "id": "CUST-002",
-      "userId": 5,
+      "userId": "5",
       "policyIds": [
         "POL-003"
       ],
-      "nominee": "Maria Martinez",
-      "address": "456 Park Avenue, Delhi, Delhi",
+      "nominee": "Carlos Martinez",
+      "address": "456 Park Avenue, Delhi",
       "dateOfBirth": "1985-08-22",
       "aadharNumber": "234567890123",
       "panNumber": "FGHIJ5678K",
       "kycStatus": "pending",
       "createdAt": "2024-01-19T08:30:00Z"
-    }
-  ],
-  "claims": [
+    },
     {
-      "id": "CLAIM-001",
-      "policyId": "POL-001",
-      "customerId": "CUST-001",
-      "type": "health",
-      "amount": 50000,
-      "date": "2024-01-20",
-      "status": "approved",
-      "description": "Hospitalization claim for surgery",
-      "documents": [
-        "bill1.jpg",
-        "report.pdf"
+      "id": "CUST-003",
+      "userId": "7",
+      "policyIds": [
+        "POL-001"
       ],
-      "createdAt": "2024-01-20T09:00:00Z",
-      "remarks": "done!!!"
-    },
-    {
-      "id": "CLAIM-002",
-      "policyId": "POL-003",
-      "customerId": "CUST-002",
-      "type": "vehicle",
-      "amount": 25000,
-      "date": "2024-01-21",
-      "status": "approved",
-      "description": "Vehicle accident damage claim",
-      "documents": [
-        "accident_report.pdf",
-        "estimate.jpg"
-      ],
-      "createdAt": "2024-01-21T14:30:00Z"
-    },
-    {
-      "id": "fcbb",
-      "status": "rejected",
-      "date": "2026-01-27",
-      "policyId": "POL-003",
-      "type": "vehicle",
-      "amount": 346356,
-      "description": "fbsht",
-      "remarks": "shitttt"
-    },
-    {
-      "id": "b960",
-      "status": "approved",
-      "date": "2026-01-27",
-      "policyId": "POL-002",
-      "type": "life",
-      "amount": 365356,
-      "description": "fgetht",
-      "remarks": "rger"
-    },
-    {
-      "id": "14ca",
-      "status": "rejected",
-      "date": "2026-01-27",
-      "policyId": "POL-002",
-      "type": "life",
-      "amount": 5353,
-      "description": "dbete",
-      "remarks": ""
-    },
-    {
-      "id": "498f",
-      "status": "approved",
-      "date": "2026-01-27",
-      "policyId": "POL-002",
-      "type": "life",
-      "amount": 4352,
-      "description": "sfrgwe",
-      "remarks": "done"
-    },
-    {
-      "id": "f742",
-      "status": "approved",
-      "date": "2026-01-27",
-      "policyId": "P168",
-      "type": "life",
-      "amount": 3565,
-      "description": "dgheth",
-      "remarks": ""
-    },
-    {
-      "id": "172e",
-      "status": "approved",
-      "date": "2026-01-27",
-      "policyId": "POL-002",
-      "type": "life",
-      "amount": 3255,
-      "description": "hello",
-      "remarks": ""
-    },
-    {
-      "id": "d2d0",
-      "status": "pending",
-      "date": "2026-01-27",
-      "policyId": "POL-002",
-      "type": "life",
-      "amount": 54754,
-      "description": "dghetjd"
-    },
-    {
-      "id": "4d48",
-      "status": "pending",
-      "date": "2026-01-27",
-      "policyId": "POL-002",
-      "type": "life",
-      "amount": 543,
-      "description": "tbhby"
+      "nominee": "Susan Taylor",
+      "address": "789 Lake View, Bangalore",
+      "dateOfBirth": "1992-11-30",
+      "aadharNumber": "345678901234",
+      "panNumber": "KLMNO9012P",
+      "kycStatus": "verified",
+      "createdAt": "2024-02-10T14:00:00Z"
     }
   ],
   "agents": [
     {
       "id": "AGT-001",
-      "userId": 2,
+      "userId": "2",
       "licenseNumber": "LIC123456",
       "commissionRate": 15,
       "assignedCustomers": [
@@ -286,26 +185,108 @@
     },
     {
       "id": "AGT-002",
-      "userId": 4,
+      "userId": "4",
       "licenseNumber": "LIC789012",
       "commissionRate": 12,
-      "assignedCustomers": [],
+      "assignedCustomers": [
+        "CUST-003",
+        "CUST-002",
+        "CUST-001"
+      ],
       "totalPoliciesSold": 23,
       "status": "active",
       "joiningDate": "2023-09-15"
+    },
+    {
+      "id": "AGT-003",
+      "userId": "6",
+      "licenseNumber": "LIC456789",
+      "commissionRate": 10,
+      "assignedCustomers": [
+        "CUST-003"
+      ],
+      "totalPoliciesSold": 10,
+      "status": "active",
+      "joiningDate": "2024-01-10"
+    }
+  ],
+  "claims": [
+    {
+      "id": "CLAIM-001",
+      "policyId": "POL-001",
+      "customerId": "CUST-001",
+      "type": "health",
+      "amount": 50000,
+      "date": "2024-01-20",
+      "status": "approved",
+      "description": "Hospitalization claim for surgery",
+      "assignedAgentId": "AGT-001",
+      "remarks": "Processed successfully"
+    },
+    {
+      "id": "CLAIM-002",
+      "policyId": "POL-003",
+      "customerId": "CUST-002",
+      "type": "vehicle",
+      "amount": 25000,
+      "date": "2024-01-21",
+      "status": "pending",
+      "description": "Vehicle accident damage",
+      "assignedAgentId": "AGT-001",
+      "remarks": ""
+    },
+    {
+      "id": "CLAIM-003",
+      "policyId": "POL-001",
+      "customerId": "CUST-003",
+      "type": "health",
+      "amount": 15000,
+      "date": "2024-02-15",
+      "status": "pending",
+      "description": "Regular checkup claim",
+      "assignedAgentId": "AGT-003",
+      "remarks": ""
+    },
+    {
+      "id": "9054",
+      "status": "approved",
+      "date": "2026-01-29",
+      "amount": 10000,
+      "description": "family",
+      "remarks": "",
+      "policyId": "POL-001",
+      "type": "health",
+      "customerId": "CUST-001",
+      "assignedAgentId": "AGT-001",
+      "documents": {
+        "PAN": "download (1).jpg",
+        "Aadhar": "download.jpg"
+      }
     }
   ],
   "enquiries": [
     {
-      "id": "02d0",
-      "fullName": "hellooo",
-      "email": "h@gmail.com",
-      "phone": "1234567890",
+      "id": "ENQ-001",
+      "fullName": "Robert Taylor",
+      "email": "robert@example.com",
+      "phone": "9876543216",
       "type": "life",
-      "message": "testing enquiry form",
+      "message": "Interested in Term Life plan",
       "status": "new",
-      "assignedAgentId": null,
-      "createdAt": "2026-01-28T04:52:07.913Z"
+      "assignedAgentId": "AGT-002",
+      "createdAt": "2024-02-10T14:00:00Z"
+    }
+  ],
+  "payments": [
+    {
+      "id": "9b75",
+      "userId": "3",
+      "policyId": "POL-001",
+      "policyName": "Comprehensive Health Insurance",
+      "amount": 12000,
+      "date": "2026-01-29",
+      "status": "Success",
+      "transactionId": "TXN-D4F0Q8SW8"
     }
   ]
 }
