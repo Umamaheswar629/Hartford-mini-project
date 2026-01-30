@@ -1,0 +1,168 @@
+@if (stats$ | async; as stats) {
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8 animate-in fade-in slide-in-from-top-4 duration-500">
+    <div class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm">
+      <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">System Volume</p>
+      <h3 class="text-3xl font-black text-gray-900 mt-2">{{ stats.totalClaims }}</h3>
+      <p class="text-[10px] text-gray-400 font-medium mt-1">Total processed claims</p>
+    </div>
+
+    <div class="bg-amber-50 p-6 rounded-3xl border border-amber-100 shadow-sm">
+      <p class="text-xs font-bold text-amber-600 uppercase tracking-wider">Unassigned</p>
+      <h3 class="text-3xl font-black text-amber-700 mt-2">{{ stats.unassigned }}</h3>
+      <p class="text-[10px] text-amber-500 font-medium mt-1">Awaiting allocation</p>
+    </div>
+
+    <div class="bg-indigo-900 text-white p-6 rounded-3xl shadow-xl shadow-indigo-100">
+      <p class="text-xs font-bold text-indigo-300 uppercase tracking-wider">Total Payouts</p>
+      <h3 class="text-3xl font-black mt-2">₹{{ stats.totalApproved | number }}</h3>
+      <p class="text-[10px] text-indigo-400 font-medium mt-1">Approved claim amounts</p>
+    </div>
+
+    <div class="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm">
+      <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Active Workforce</p>
+      <h3 class="text-3xl font-black text-gray-900 mt-2">{{ agents.length }}</h3>
+      <p class="text-[10px] text-gray-400 font-medium mt-1">Registered Agents</p>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+    
+    <div class="bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-sm flex flex-col items-center">
+      <h4 class="text-sm font-bold text-gray-400 uppercase mb-8 self-start">Claim Status Distribution</h4>
+      
+      <div class="relative w-64 h-64 rounded-full shadow-inner flex items-center justify-center transition-all duration-700"
+           [style.background]="stats.chartGradient">
+        <div class="w-40 h-40 bg-white rounded-full flex flex-col items-center justify-center shadow-lg">
+          <span class="text-4xl font-black text-gray-800">{{ stats.totalClaims }}</span>
+          <span class="text-[10px] font-bold text-gray-400 uppercase">Total</span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-3 gap-4 mt-10 w-full">
+        <div class="text-center">
+          <div class="flex items-center justify-center gap-2 mb-1">
+            <span class="w-3 h-3 bg-green-500 rounded-full"></span>
+            <span class="text-[10px] font-bold text-gray-500 uppercase">Approved</span>
+          </div>
+          <p class="font-black text-gray-800">{{ stats.approvedPct }}%</p>
+        </div>
+        <div class="text-center border-x border-gray-100">
+          <div class="flex items-center justify-center gap-2 mb-1">
+            <span class="w-3 h-3 bg-red-500 rounded-full"></span>
+            <span class="text-[10px] font-bold text-gray-500 uppercase">Rejected</span>
+          </div>
+          <p class="font-black text-gray-800">{{ stats.rejectedPct }}%</p>
+        </div>
+        <div class="text-center">
+          <div class="flex items-center justify-center gap-2 mb-1">
+            <span class="w-3 h-3 bg-amber-50 rounded-full border border-amber-200"></span>
+            <span class="text-[10px] font-bold text-gray-500 uppercase">Pending</span>
+          </div>
+          <p class="font-black text-gray-800">{{ stats.pendingPct }}%</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-sm">
+      <h4 class="text-sm font-bold text-gray-400 uppercase mb-8">Processing Efficiency</h4>
+      
+      <div class="space-y-8">
+        <div>
+          <div class="flex justify-between mb-2">
+            <span class="text-xs font-bold text-gray-600">Approval Rate</span>
+            <span class="text-xs font-black text-green-600">{{ stats.approvedPct }}%</span>
+          </div>
+          <div class="w-full bg-gray-100 rounded-full h-4 overflow-hidden">
+            <div class="bg-green-500 h-full rounded-full transition-all duration-1000"
+                 [style.width.%]="stats.approvedPct"></div>
+          </div>
+        </div>
+
+        <div>
+          <div class="flex justify-between mb-2">
+            <span class="text-xs font-bold text-gray-600">Rejection Rate</span>
+            <span class="text-xs font-black text-red-600">{{ stats.rejectedPct }}%</span>
+          </div>
+          <div class="w-full bg-gray-100 rounded-full h-4 overflow-hidden">
+            <div class="bg-red-500 h-full rounded-full transition-all duration-1000"
+                 [style.width.%]="stats.rejectedPct"></div>
+          </div>
+        </div>
+
+        <div>
+          <div class="flex justify-between mb-2">
+            <span class="text-xs font-bold text-gray-600">Current Backlog</span>
+            <span class="text-xs font-black text-amber-600">{{ stats.pendingPct }}%</span>
+          </div>
+          <div class="w-full bg-gray-100 rounded-full h-4 overflow-hidden">
+            <div class="bg-amber-400 h-full rounded-full transition-all duration-1000"
+                 [style.width.%]="stats.pendingPct"></div>
+          </div>
+        </div>
+
+        <div class="mt-8 p-4 bg-indigo-50 rounded-2xl flex items-center gap-4">
+          <div class="p-3 bg-indigo-600 text-white rounded-xl">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+          </div>
+          <div>
+            <p class="text-xs font-bold text-indigo-900">System Performance</p>
+            <p class="text-[10px] text-indigo-600">Operational health is currently stable with {{ stats.unassigned }} items needing attention.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+} @else {
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8 animate-pulse">
+    <div class="h-32 bg-gray-200 rounded-3xl"></div>
+    <div class="h-32 bg-gray-200 rounded-3xl"></div>
+    <div class="h-32 bg-gray-200 rounded-3xl"></div>
+    <div class="h-32 bg-gray-200 rounded-3xl"></div>
+  </div>
+}
+@if (revenueStats$ | async; as rev) {
+  <div class="mt-8 bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-sm">
+    <div class="flex justify-between items-center mb-8">
+      <h4 class="text-sm font-bold text-gray-400 uppercase tracking-widest">Financial Revenue Report</h4>
+      <span class="px-4 py-1 bg-green-100 text-green-700 rounded-full text-xs font-bold">Live Fiscal Data</span>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
+      <div class="p-6 bg-gray-50 rounded-3xl border border-gray-100">
+        <p class="text-[10px] font-bold text-gray-400 uppercase">Gross Premium Collected</p>
+        <h3 class="text-3xl font-black text-indigo-900 mt-2">₹{{ rev.gross | number }}</h3>
+      </div>
+
+      <div class="p-6 bg-gray-50 rounded-3xl border border-gray-100">
+        <p class="text-[10px] font-bold text-gray-400 uppercase">Claims Paid (Liability)</p>
+        <h3 class="text-3xl font-black text-red-600 mt-2">- ₹{{ rev.payouts | number }}</h3>
+      </div>
+
+      <div [class]="rev.net >= 0 ? 'bg-green-50 border-green-100' : 'bg-red-50 border-red-100'" 
+           class="p-6 rounded-3xl border transition-colors">
+        <p class="text-[10px] font-bold uppercase" [class]="rev.net >= 0 ? 'text-green-600' : 'text-red-600'">
+          {{ rev.net >= 0 ? 'Net Profit' : 'Operating Loss' }}
+        </p>
+        <h3 class="text-3xl font-black mt-2" [class]="rev.net >= 0 ? 'text-green-700' : 'text-red-700'">
+          ₹{{ rev.net | number }}
+        </h3>
+      </div>
+    </div>
+
+    <h5 class="text-xs font-bold text-gray-400 uppercase mb-4">Revenue by Category</h5>
+    <div class="space-y-4">
+      @for (item of rev.byType | keyvalue; track item.key) {
+        <div>
+          <div class="flex justify-between text-xs font-bold mb-2 capitalize">
+            <span>{{ item.key }} Insurance</span>
+            <span class="text-gray-900">₹{{ item.value | number }}</span>
+          </div>
+          <div class="w-full bg-gray-100 rounded-full h-2">
+            <div class="bg-[#75013F] h-2 rounded-full" 
+                 [style.width.%]="(item.value / rev.gross) * 100"></div>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+}

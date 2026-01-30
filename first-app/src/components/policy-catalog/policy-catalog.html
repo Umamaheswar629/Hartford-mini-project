@@ -1,0 +1,112 @@
+<app-customer-navbar></app-customer-navbar>
+
+<div class="p-6 max-w-7xl mx-auto bg-gray-50 min-h-screen">
+  
+  <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 mb-8">
+    <div>
+      <h2 class="text-3xl font-black text-gray-900">Policy Catalog</h2>
+      <p class="text-gray-500 font-medium">Browse our range of protection plans designed for you.</p>
+    </div>
+    
+    <div class="flex flex-wrap gap-3 w-full lg:w-auto">
+      <input type="text" placeholder="Search by name..."
+             class="border-gray-200 border px-4 py-2.5 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-500 outline-none w-full md:w-64"
+             [(ngModel)]="searchText" (input)="applyFilters()" />
+      
+      <select [(ngModel)]="sortBy" (change)="applyFilters()" 
+              class="border-gray-200 border px-3 py-2.5 rounded-xl shadow-sm bg-white outline-none">
+        <option value="default">Sort By</option>
+        <option value="low">Premium: Low to High</option>
+        <option value="high">Premium: High to Low</option>
+      </select>
+
+      @if (compareList.length > 0) {
+        <button (click)="showCompareModal = true" 
+                class="bg-orange-500 text-white px-5 py-2.5 rounded-xl font-bold shadow-lg hover:bg-orange-600 transition-all flex items-center gap-2">
+          <span>Compare</span>
+          <span class="bg-white text-orange-600 rounded-full w-5 h-5 flex items-center justify-center text-xs">{{ compareList.length }}</span>
+        </button>
+      }
+    </div>
+  </div>
+
+  <div class="flex flex-wrap gap-2 mb-10 pb-4 border-b border-gray-200">
+    <button (click)="setCategory('all')" 
+            [class]="selectedCategory === 'all' ? 'bg-gray-900 text-white shadow-lg' : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'"
+            class="px-6 py-2.5 rounded-full text-xs font-black uppercase tracking-widest border transition-all">
+      All Plans
+    </button>
+    <button (click)="setCategory('health')" 
+            [class]="selectedCategory === 'health' ? 'bg-red-600 text-white shadow-lg shadow-red-100' : 'bg-white text-gray-600 border-gray-200 hover:bg-red-50'"
+            class="px-6 py-2.5 rounded-full text-xs font-black uppercase tracking-widest border transition-all">
+      🏥 Health
+    </button>
+    <button (click)="setCategory('life')" 
+            [class]="selectedCategory === 'life' ? 'bg-blue-600 text-white shadow-lg shadow-blue-100' : 'bg-white text-gray-600 border-gray-200 hover:bg-blue-50'"
+            class="px-6 py-2.5 rounded-full text-xs font-black uppercase tracking-widest border transition-all">
+      🧬 Life
+    </button>
+    <button (click)="setCategory('vehicle')" 
+            [class]="selectedCategory === 'vehicle' ? 'bg-amber-500 text-white shadow-lg shadow-amber-100' : 'bg-white text-gray-600 border-gray-200 hover:bg-amber-50'"
+            class="px-6 py-2.5 rounded-full text-xs font-black uppercase tracking-widest border transition-all">
+      🚗 Vehicle
+    </button>
+    <button (click)="setCategory('home')" 
+            [class]="selectedCategory === 'home' ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-100' : 'bg-white text-gray-600 border-gray-200 hover:bg-emerald-50'"
+            class="px-6 py-2.5 rounded-full text-xs font-black uppercase tracking-widest border transition-all">
+      🏠 Home
+    </button>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    @for (policy of filteredPolicies$ | async; track policy.id) {
+      <div class="bg-white rounded-[2rem] shadow-sm border border-gray-100 hover:shadow-2xl transition-all duration-500 p-8 flex flex-col justify-between group relative overflow-hidden">
+        
+        <label class="absolute top-6 right-6 flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-gray-400 cursor-pointer hover:text-indigo-600 transition-colors">
+          <input type="checkbox" [checked]="isInCompare(policy.id)" (change)="toggleCompare(policy)" 
+                 class="w-4 h-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"> 
+          Compare
+        </label>
+
+        <div>
+          <div class="mb-6">
+            <span [ngClass]="{
+              'bg-red-50 text-red-700': policy.type.toLowerCase() === 'health',
+              'bg-blue-50 text-blue-700': policy.type.toLowerCase() === 'life',
+              'bg-amber-50 text-amber-700': policy.type.toLowerCase() === 'vehicle',
+              'bg-emerald-50 text-emerald-700': policy.type.toLowerCase() === 'home'
+            }" class="px-4 py-1.5 text-[10px] font-black rounded-full uppercase tracking-tighter">
+              {{ policy.type }}
+            </span>
+            <h3 class="text-2xl font-black text-gray-900 mt-4 group-hover:text-indigo-600 transition-colors leading-tight">
+              {{ policy.name }}
+            </h3>
+          </div>
+
+          <div class="grid grid-cols-2 gap-6 py-6 border-y border-gray-50 my-6">
+            <div>
+              <p class="text-[10px] text-gray-400 uppercase font-black tracking-widest">Premium / Year</p>
+              <p class="text-xl text-gray-900 font-black mt-1">₹{{ policy.premium | number }}</p>
+            </div>
+            <div>
+              <p class="text-[10px] text-gray-400 uppercase font-black tracking-widest">Max Coverage</p>
+              <p class="text-xl text-indigo-600 font-black mt-1">₹{{ policy.coverage | number }}</p>
+            </div>
+          </div>
+        </div>
+
+        <button (click)="viewDetails(policy.id)"
+                class="w-full py-4 bg-gray-900 hover:bg-indigo-700 text-white rounded-2xl font-bold transition-all shadow-lg active:transform active:scale-95 flex justify-center items-center gap-2 group-hover:gap-4">
+          View Details <span>&rarr;</span>
+        </button>
+      </div>
+    } @empty {
+      <div class="col-span-full py-32 text-center bg-white rounded-[3rem] border-2 border-dashed border-gray-100">
+        <div class="text-5xl mb-4">🔍</div>
+        <p class="text-gray-400 font-bold text-lg uppercase tracking-tighter">No {{selectedCategory}} plans found.</p>
+        <button (click)="setCategory('all')" class="mt-4 text-indigo-600 font-black text-sm uppercase">Clear Filters</button>
+      </div>
+    }
+  </div>
+
+  </div>
